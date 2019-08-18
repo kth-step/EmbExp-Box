@@ -59,3 +59,10 @@
 1. `ssh-copy-id "-p 8822 lindnera@tcs79.csc.kth.se"`
 
 
+## Known issues
+- minimodule (JTAG/serial) communication/driver issue?
+  - device cannot be found by openocd
+  - `lsusb -v` output stutters (most likely runs into timeouts) and prints `(error)` where the serial number of the device is supposed to be
+  - a box power down and power up and `tools/usbreset` solves the issue
+
+

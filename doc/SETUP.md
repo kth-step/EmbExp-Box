@@ -2,6 +2,7 @@
 
 
 ## Install dependencies
+The program `python3` should be at least Python 3.7 (tested with Python 3.7.3).
 Run the following commands.
 - general
   ```
