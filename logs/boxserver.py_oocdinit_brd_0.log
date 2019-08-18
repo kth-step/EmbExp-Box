@@ -1,0 +1,181 @@
+FT1OSQAT
+('Box1', 'RPi3_2')
+0
+20000
+--------------------
+openocd/src/openocd -f ../config/openocd/interface/minimodule.cfg -c ftdi_serial FT1OSQAT -c tcl_port 20066 -c gdb_port 20033 -c telnet_port 20044 -f ../config/openocd/target/rpi3.cfg
+Open On-Chip Debugger 0.10.0+dev-g16496488 (2019-08-15-18:47)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+Info : Listening on port 20066 for tcl connections
+Info : Listening on port 20044 for telnet connections
+Info : clock speed 1000 kHz
+Error: JTAG scan chain interrogation failed: all ones
+Error: Check JTAG interface, timings, target power, etc.
+Error: Trying to use configured scan chain anyway...
+Error: rpi3.tap: IR capture error; saw 0x0f not 0x01
+Warn : Bypassing JTAG setup events due to errors
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: Invalid ACK (7) in DAP response
+Error: JTAG-DP STICKY ERROR
+Error: ftdi device did not accept all data: 0, tried 25
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+Error: libusb_handle_events() failed with LIBUSB_ERROR_NO_DEVICE
+Error: unable to purge ftdi rx buffers: LIBUSB_ERROR_NO_DEVICE
+Error: error while flushing MPSSE queue: -4
+
+

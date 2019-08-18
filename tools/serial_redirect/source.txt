@@ -1,0 +1,4 @@
+https://pyserial.readthedocs.io/en/latest/examples.html
+
+https://pypi.org/project/pyserial
+
