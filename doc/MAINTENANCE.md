@@ -53,10 +53,12 @@
 
 
 ## Create a new user
-1. Add the user and document it here
-1. `sudo usermod -aG devel lindnera`
-1. `sudo usermod -aG plugdev lindnera`
-1. `ssh-copy-id "-p 8822 lindnera@tcs79.csc.kth.se"`
+1. `sudo adduser USERNAME`
+1. `sudo usermod -aG devel USERNAME`
+1. `sudo usermod -aG plugdev USERNAME`
+1. setup ssh keys
+   - `ssh-copy-id "-p 4422 USERNAME@tcs79.csc.kth.se"`, or
+   - create `/home/USERNAME/.ssh/authorized_keys`, `chmod 700 /home/USERNAME/.ssh`, `chmod 600 /home/USERNAME/.ssh/authorized_keys`
 
 
 ## Known issues
