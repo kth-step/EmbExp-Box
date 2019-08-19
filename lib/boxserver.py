@@ -51,14 +51,22 @@ class BoxServer:
 				#while True:
 				#	messaging.send_message(sc, messaging.recv_message(sc))
 
+				# 0a. send available request types
+				messaging.send_message(sc, ["get_board"])
+				
+				# 0b. receive request type
+				request = messaging.recv_message(sc)
+				if request != "get_board":
+					raise Exception("input error, request not available")
+
 				# 1. send available board types
 				board_types = self.config.get_board_types()
 				messaging.send_message(sc, board_types)
 
 				# 2a. receive required board
 				board_type = messaging.recv_message(sc)
-				if not isinstance(board_type, str):
-					raise Exception("input format error, board_type")
+				if not board_type in board_types:
+					raise Exception("input error, requested board type is not available")
 
 				# 2b. send available board_ids
 				board_ids = set(self.config.get_boards(board_type))

@@ -11,6 +11,11 @@ import messaging
 with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 	sc.connect(('localhost',35555))
 
+	# 0. select request
+	request = "get_board"
+	print(messaging.recv_message(sc))
+	messaging.send_message(sc, request)
+
 	# 1. available board types
 	print(messaging.recv_message(sc))
 
