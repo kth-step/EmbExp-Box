@@ -31,10 +31,12 @@ except:
 	print("error: select a valid board")
 	exit(-2)
 
-if "JTAG_UART_Serial" in board_params:
-	jtag_ftdi_serial = board_params["JTAG_UART_Serial"]
-elif "JTAG_Serial" in board_params:
-	jtag_ftdi_serial = board_params["JTAG_Serial"]
+_JTAG_MINIMOD_SERNUM = "jtag_minimodule_serialnumber"
+_JTAG_SERNUM_OLD = "JTAG_UART_Serial"
+if _JTAG_MINIMOD_SERNUM in board_params:
+	jtag_ftdi_serial = board_params[_JTAG_MINIMOD_SERNUM]
+elif _JTAG_SERNUM_OLD in board_params:
+	jtag_ftdi_serial = board_params[_JTAG_SERNUM_OLD]
 else:
 	assert False
 

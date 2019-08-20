@@ -1,6 +1,7 @@
 
 import threading
 import time
+import logging
 
 from subprocess import Popen
 import subprocess
@@ -36,7 +37,7 @@ class ToolWrapper:
 	def start(self):
 		self.p = Popen([self.path] + self.args, stdin=subprocess.PIPE, stdout=self.logfile, stderr=self.logfile)
 		self.started = True
-		print(f"toolwrapper for {self.path} started")
+		logging.info(f"toolwrapper for {self.path} started")
 
 	def wait(self, timeout):
 		self.p.wait(timeout=timeout)
@@ -57,17 +58,17 @@ class ToolWrapper:
 		self.check_running()
 		if self.p.poll() == None:
 			self.p.terminate()
-			print(f"toolwrapper for {self.path}: sent signal to terminate")
+			logging.info(f"toolwrapper for {self.path}: sent signal to terminate")
 		else:
-			print(f"toolwrapper for {self.path} is already shut down")
+			logging.warning(f"toolwrapper for {self.path} is already shut down")
 
 	def kill(self):
 		self.check_running()
 		if self.p.poll() == None:
 			self.p.kill()
-			print(f"toolwrapper for {self.path}: sent kill signal")
+			logging.info(f"toolwrapper for {self.path}: sent kill signal")
 		else:
-			print(f"toolwrapper for {self.path} is already shut down")
+			logging.warning(f"toolwrapper for {self.path} is already shut down")
 
 
 # a termination helper for the simple wrapper, kills a subprocess once input arrives on stdin (apparently simething like a flush triggers this as well)
@@ -101,6 +102,7 @@ def SimpleWrapper(cmd_list, timeout):
 	with subprocess.Popen(cmd_list, stdin=subprocess.PIPE) as p:
 		try:
 			WaitInputTerminator(p, timeout).start()
+			# probably this should be p.wait()
 			p.communicate()
 		finally:
 			# overkill

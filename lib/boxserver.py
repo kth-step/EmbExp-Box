@@ -4,6 +4,7 @@ import threading
 import _thread
 import time
 import os
+import logging
 
 import messaging
 import boxgpio
@@ -34,7 +35,7 @@ class BoxServer:
 			s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			s.bind(('0.0.0.0', port))
 			s.listen(5)
-			print(f'Listing on port {port}...')
+			logging.info(f'Listing on port {port}...')
 
 			
 
@@ -47,7 +48,7 @@ class BoxServer:
 	def socket_handle(self, sc, addr):
 		try:
 			with sc:
-				print(f"Connection established to {addr[0]}:{addr[1]}")
+				logging.info(f"Connection established to {addr[0]}:{addr[1]}")
 				#while True:
 				#	messaging.send_message(sc, messaging.recv_message(sc))
 
@@ -89,14 +90,14 @@ class BoxServer:
 					try:
 						board_id = self.claim_board(board_ids, user_idx)
 					except BoardNotAvailableException:
-						print(f"No {board_type} available")
+						logging.warning(f"No {board_type} available")
 						messaging.send_message(sc, [-1,board_id,"no board available"])
 						return
 					#initialize board
 					try:
 						self.init_board(board_id)
 					except:
-						print(f"Error while initializing {board_id}")
+						logging.error(f"Error while initializing {board_id}")
 						messaging.send_message(sc, [-2,board_id,"could not initialize board"])
 						raise
 					# claimed and initialize, inform the client
@@ -120,7 +121,7 @@ class BoxServer:
 					# always yield the board here
 					self.yield_board(board_id)
 		finally:
-			print(f"Connection lost with {addr[0]}:{addr[1]}")
+			logging.info(f"Connection lost with {addr[0]}:{addr[1]}")
 
 
 	# this function has to be called from within the "box management lock"
@@ -135,24 +136,24 @@ class BoxServer:
 
 		if withTimer:
 			if on:
-				print(f"powering on {box_id}")
+				logging.info(f"powering on {box_id}")
 				self.box_controllers[box_id].set_power(True)
 				time.sleep(powerup_waittime)
 				if box_id in self.poweroff_timer_boxes:
-					print(f"removing {box_id} from poweroff list")
+					logging.debug(f"removing {box_id} from poweroff list")
 					self.poweroff_timer_boxes.remove(box_id)
 				# turn off all unclaimed boards
 				for board_id in unclaimedBoards:
 					self.set_board_reset(board_id, True)
 			else:
-				print(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
+				logging.info(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
 				if self.poweroff_timer != None:
 					self.poweroff_timer.cancel()
 				self.poweroff_timer_boxes.add(box_id)
 				self.poweroff_timer = threading.Timer(poweroff_delay, self.set_box_power_off_timer)
 				self.poweroff_timer.start()
 		elif not on:
-			print(f"powering off {box_id} for real now, time expired")
+			logging.info(f"powering off {box_id} for real now, time expired")
 			self.box_controllers[box_id].set_power(False)
 		else:
 			# we should never get here beause of our lock
@@ -169,13 +170,12 @@ class BoxServer:
 
 
 	def set_board_reset(self, board_id, reset):
-		(box_id,_) = board_id
-		pin_reset = self.config.get_board(board_id)['pin_reset']
+		(box_id,board_name) = board_id
 		if reset:
-			print(f"resetting {board_id}")
+			logging.info(f"resetting {board_id}")
 		else:
-			print(f"running {board_id}")
-		self.box_controllers[box_id].set_pin(pin_reset, not reset)
+			logging.info(f"running {board_id}")
+		self.box_controllers[box_id].set_board_reset(board_name, reset)
 
 
 	def init_board(self, board_id):
@@ -190,7 +190,7 @@ class BoxServer:
 		oocdpath = self.config.get_boxpath("interface/openocd.py")
 		with open(logpath, 'w') as logfile:
 			with toolwrapper.ToolWrapper(oocdpath, list(board_id), logfile, oocd_termtime) as oocdwrapper:
-				print(f"oocd init {board_id} --- logging: {logpath}")
+				logging.info(f"oocd init {board_id} --- logging: {logpath}")
 				oocdwrapper.wait(oocd_runtime)
 		with open(logpath, 'r') as logfile:
 			found = False
@@ -226,7 +226,7 @@ class BoxServer:
 				self.claimed_boards.remove(board_id)
 				raise
 
-		print(f"claimed {board_id}")
+		logging.info(f"claimed {board_id}")
 		return board_id
 
 
@@ -235,7 +235,7 @@ class BoxServer:
 		with self.lock:
 			# just return if it is not really claimed yet
 			if not (board_id in self.claimed_boards):
-				print(f"yielding but not claimed: {board_id}")
+				logging.error(f"yielding but not claimed: {board_id}")
 				return
 			(box_id,_) = board_id
 			# remove it from the claimed set
@@ -248,6 +248,6 @@ class BoxServer:
 			# have to turn off the box (if not needed) within the lock
 			self.set_box_power(box_id)
 
-		print(f"yielded {board_id}")
+		logging.info(f"yielded {board_id}")
 
 
