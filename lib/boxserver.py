@@ -181,25 +181,7 @@ class BoxServer:
 	def init_board(self, board_id):
 		# initialize to reset
 		self.set_board_reset(board_id, True)
-		# timing
-		oocd_runtime = self.config.get_timing("board_init_oocd_run")
-		oocd_termtime = self.config.get_timing("board_init_oocd_term")
-		# initialize openocd
-		logfilename = "boxserver.py_oocdinit_brd_" + str(self.config.get_board(board_id)['index']) + ".log"
-		logpath = os.path.join(self.logdir,logfilename)
-		oocdpath = self.config.get_boxpath("interface/openocd.py")
-		with open(logpath, 'w') as logfile:
-			with toolwrapper.ToolWrapper(oocdpath, list(board_id), logfile, oocd_termtime) as oocdwrapper:
-				logging.info(f"oocd init {board_id} --- logging: {logpath}")
-				oocdwrapper.wait(oocd_runtime)
-		with open(logpath, 'r') as logfile:
-			found = False
-			for line in logfile:
-				if "STICKY ERROR" in line:
-					found = True
-					break
-			if not found:
-				raise Exception("openocd could not initialize the jtag port according to the output")
+		# no more initialization for now
 
 
 	def claim_board(self, board_ids, idx=-1):
