@@ -64,10 +64,10 @@ class BoxServer:
 					raise Exception("input error, request has to contain the request type and a user_id")
 				request_type = request[0]
 				user_id = request[1]
-				if not request in request_types:
+				if not request_type in request_types:
 					raise Exception("input error, request type not available")
 
-				self.request_handlers[request](sc, user_id)
+				self.request_handlers[request_type](sc, user_id)
 
 		finally:
 			logging.info(f"Connection lost with {addr[0]}:{addr[1]}")
@@ -79,9 +79,9 @@ class BoxServer:
 			claimed_boards = self.claimed_boards
 			claimed_last_by_user = self.claimed_last_by_user
 		board_ids_unclaimed = board_ids - claimed_boards
-		board_ids_to_users = {}
+		board_ids_to_users = []
 		for board_id in claimed_boards:
-			board_ids_to_users[board_id] = claimed_last_by_user[board_id]
+			board_ids_to_users.append([board_id, claimed_last_by_user[board_id]])
 		messaging.send_message(sc, {"unclaimed": list(board_ids_unclaimed), "claimed": board_ids_to_users})
 
 
