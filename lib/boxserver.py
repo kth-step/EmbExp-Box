@@ -37,7 +37,7 @@ class BoxServer:
 			s.listen(5)
 			logging.info(f'Listing on port {port}...')
 
-			
+			self.request_handlers = { "get_board": self.socket_handle_get_board }
 
 			while True:
 				# spawn a handler thread for each new connection
@@ -53,75 +53,81 @@ class BoxServer:
 				#	messaging.send_message(sc, messaging.recv_message(sc))
 
 				# 0a. send available request types
-				messaging.send_message(sc, ["get_board"])
+				request_types = list(self.request_handlers.keys())
+				messaging.send_message(sc, request_types)
 				
 				# 0b. receive request type
 				request = messaging.recv_message(sc)
-				if request != "get_board":
+				if not request in request_types:
 					raise Exception("input error, request not available")
 
-				# 1. send available board types
-				board_types = self.config.get_board_types()
-				messaging.send_message(sc, board_types)
+				self.request_handlers[request](sc)
 
-				# 2a. receive required board
-				board_type = messaging.recv_message(sc)
-				if not board_type in board_types:
-					raise Exception("input error, requested board type is not available")
-
-				# 2b. send available board_ids
-				board_ids = set(self.config.get_boards(board_type))
-				with self.lock: # for safety under the lock
-					board_ids = board_ids - self.claimed_boards
-				board_ids = list(board_ids)
-				messaging.send_message(sc, board_ids)
-
-				# 2c. take selection as "wish index" relative to the list of boards sent before, unless negative
-				user_idx = messaging.recv_message(sc)
-				if not isinstance(user_idx, int):
-					raise Exception("input format error, board_index")
-				if (user_idx >= 0) and (user_idx >= len(board_ids)):
-					raise Exception("input format error, board_index")
-
-				# 3. claim one from the available boards and send its name
-				board_id = -1
-				try:
-					# calim board
-					try:
-						board_id = self.claim_board(board_ids, user_idx)
-					except BoardNotAvailableException:
-						logging.warning(f"No {board_type} available")
-						messaging.send_message(sc, [-1,board_id,"no board available"])
-						return
-					#initialize board
-					try:
-						self.init_board(board_id)
-					except:
-						logging.error(f"Error while initializing {board_id}")
-						messaging.send_message(sc, [-2,board_id,"could not initialize board"])
-						raise
-					# claimed and initialize, inform the client
-					messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
-
-					while True:
-						# 4. send available commands
-						messaging.send_message(sc, ["stop", "start"])
-
-						# 5. receive selected command and act
-						command = messaging.recv_message(sc)
-						if command == "stop":
-							self.set_board_reset(board_id, True)
-						if command == "start":
-							self.set_board_reset(board_id, False)
-				except messaging.SocketDiedException:
-					pass
-				except ConnectionResetError:
-					pass
-				finally:
-					# always yield the board here
-					self.yield_board(board_id)
 		finally:
 			logging.info(f"Connection lost with {addr[0]}:{addr[1]}")
+
+
+	def socket_handle_get_board(self, sc):
+		# 1. send available board types
+		board_types = self.config.get_board_types()
+		messaging.send_message(sc, board_types)
+
+		# 2a. receive required board
+		board_type = messaging.recv_message(sc)
+		if not board_type in board_types:
+			raise Exception("input error, requested board type is not available")
+
+		# 2b. send available board_ids
+		board_ids = set(self.config.get_boards(board_type))
+		with self.lock: # for safety under the lock
+			board_ids = board_ids - self.claimed_boards
+		board_ids = list(board_ids)
+		messaging.send_message(sc, board_ids)
+
+		# 2c. take selection as "wish index" relative to the list of boards sent before, unless negative
+		user_idx = messaging.recv_message(sc)
+		if not isinstance(user_idx, int):
+			raise Exception("input format error, board_index")
+		if (user_idx >= 0) and (user_idx >= len(board_ids)):
+			raise Exception("input format error, board_index")
+
+		# 3. claim one from the available boards and send its name
+		board_id = -1
+		try:
+			# calim board
+			try:
+				board_id = self.claim_board(board_ids, user_idx)
+			except BoardNotAvailableException:
+				logging.warning(f"No {board_type} available")
+				messaging.send_message(sc, [-1,board_id,"no board available"])
+				return
+			#initialize board
+			try:
+				self.init_board(board_id)
+			except:
+				logging.error(f"Error while initializing {board_id}")
+				messaging.send_message(sc, [-2,board_id,"could not initialize board"])
+				raise
+			# claimed and initialize, inform the client
+			messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
+
+			while True:
+				# 4. send available commands
+				messaging.send_message(sc, ["stop", "start"])
+
+				# 5. receive selected command and act
+				command = messaging.recv_message(sc)
+				if command == "stop":
+					self.set_board_reset(board_id, True)
+				if command == "start":
+					self.set_board_reset(board_id, False)
+		except messaging.SocketDiedException:
+			pass
+		except ConnectionResetError:
+			pass
+		finally:
+			# always yield the board here
+			self.yield_board(board_id)
 
 
 	# this function has to be called from within the "box management lock"
