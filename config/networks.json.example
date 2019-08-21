@@ -1,0 +1,15 @@
+{
+	"default_username" : "myuser1",
+	"networks": {
+		"Network1": {
+			"master": "host.example.org",
+			"nodes": {
+				"host.example.org": {
+					"port": 22
+					"username": "myuser2"
+				}
+			}
+		}
+	}
+}
+

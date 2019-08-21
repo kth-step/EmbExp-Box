@@ -10,8 +10,6 @@ class BoxConfig:
 		# read configs from json file
 		with open(self.get_boxpath("config/boxes.json"), "r") as read_file:
 			self.boxes = json.load(read_file)
-		with open(self.get_boxpath("config/timings.json"), "r") as read_file:
-			self.timings = json.load(read_file)
 		# augment config with unique integer boardindexes
 		i = 0
 		for box_k in self.boxes.keys():
@@ -54,9 +52,5 @@ class BoxConfig:
 	def get_board(self, board_id):
 		(box_name,board_name) = board_id
 		return self.boxes[box_name]['boards'][board_name]
-
-	def get_timing(self, key):
-		return self.timings[key]
-
 
 

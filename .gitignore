@@ -1,5 +1,11 @@
 
+# python binaries
 *.pyc
 
+# log files
 logs
+
+# config files
+config/boxes.json
+config/networks.json
 

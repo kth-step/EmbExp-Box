@@ -131,8 +131,8 @@ class BoxServer:
 		# collect all unclaimed boards from this box
 		unclaimedBoards = set(filter(lambda b: b[0] == box_id, self.config.get_boards_ids())) - self.claimed_boards
 		# timing: delay for box powerup and poweroff (in seconds)
-		powerup_waittime = self.config.get_timing("box_powerup_wait")
-		poweroff_delay = self.config.get_timing("box_poweroff_delay")
+		powerup_waittime = self.config.get_box(box_id)["time_powerup_wait"]
+		poweroff_delay = self.config.get_box(box_id)["time_poweroff_delay"]
 
 		if withTimer:
 			if on:
