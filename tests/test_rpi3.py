@@ -5,11 +5,13 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 import socket
+import getpass
+import tempfile
+import time
+
 import messaging
 import boxconfig
 import toolwrapper
-import tempfile
-import time
 
 
 config = boxconfig.BoxConfig()
@@ -72,7 +74,9 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 	sc.connect(('localhost',35555))
 
 	# 0. select request
-	request = "get_board"
+	request_type = "get_board"
+	user_id = getpass.getuser()
+	request = [request_type, user_id]
 	print(messaging.recv_message(sc))
 	messaging.send_message(sc, request)
 

@@ -9,7 +9,7 @@ import boxconfig
 import boxserver
 
 import logging
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 config = boxconfig.BoxConfig()
 

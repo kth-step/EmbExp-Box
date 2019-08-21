@@ -21,6 +21,7 @@ class BoxServer:
 		self.lock = threading.Lock()
 		# the set of claimed boards, is protected by the lock
 		self.claimed_boards = set()
+		self.claimed_last_by_user = {}
 		# the gpio objects per box
 		self.box_controllers = {}
 		for box_id in self.config.boxes.keys():
@@ -37,7 +38,8 @@ class BoxServer:
 			s.listen(5)
 			logging.info(f'Listing on port {port}...')
 
-			self.request_handlers = { "get_board": self.socket_handle_get_board }
+			self.request_handlers = { "get_board": self.socket_handle_get_board, \
+						  "query_boxes": self.socket_handle_query_boxes }
 
 			while True:
 				# spawn a handler thread for each new connection
@@ -58,16 +60,32 @@ class BoxServer:
 				
 				# 0b. receive request type
 				request = messaging.recv_message(sc)
+				if not isinstance(request, list) and len(request) != 2:
+					raise Exception("input error, request has to contain the request type and a user_id")
+				request_type = request[0]
+				user_id = request[1]
 				if not request in request_types:
-					raise Exception("input error, request not available")
+					raise Exception("input error, request type not available")
 
-				self.request_handlers[request](sc)
+				self.request_handlers[request](sc, user_id)
 
 		finally:
 			logging.info(f"Connection lost with {addr[0]}:{addr[1]}")
 
 
-	def socket_handle_get_board(self, sc):
+	def socket_handle_query_boxes(self, sc, user_id):
+		board_ids = set(self.config.get_boards_ids())
+		with self.lock:
+			claimed_boards = self.claimed_boards
+			claimed_last_by_user = self.claimed_last_by_user
+		board_ids_unclaimed = board_ids - claimed_boards
+		board_ids_to_users = {}
+		for board_id in claimed_boards:
+			board_ids_to_users[board_id] = claimed_last_by_user[board_id]
+		messaging.send_message(sc, {"unclaimed": list(board_ids_unclaimed), "claimed": board_ids_to_users})
+
+
+	def socket_handle_get_board(self, sc, user_id):
 		# 1. send available board types
 		board_types = self.config.get_board_types()
 		messaging.send_message(sc, board_types)
@@ -96,7 +114,7 @@ class BoxServer:
 		try:
 			# calim board
 			try:
-				board_id = self.claim_board(board_ids, user_idx)
+				board_id = self.claim_board(user_id, board_ids, user_idx)
 			except BoardNotAvailableException:
 				logging.warning(f"No {board_type} available")
 				messaging.send_message(sc, [-1,board_id,"no board available"])
@@ -190,7 +208,7 @@ class BoxServer:
 		# no more initialization for now
 
 
-	def claim_board(self, board_ids, idx=-1):
+	def claim_board(self, user_id, board_ids, idx=-1):
 		# have to determine which ones are not in use, turn on the box maybe
 		with self.lock:
 			# first select a board
@@ -204,6 +222,8 @@ class BoxServer:
 			# check whether selection is already claimed
 			if board_id in self.claimed_boards:
 				raise BoardNotAvailableException()
+			# register the user_id
+			self.claimed_last_by_user[board_id] = user_id
 			(box_id,_) = board_id
 			# ... and add it to the claimed set
 			self.claimed_boards.add(board_id)

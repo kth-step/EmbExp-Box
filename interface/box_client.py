@@ -5,6 +5,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
 import socket
+import getpass
+
 import messaging
 
 
@@ -12,7 +14,25 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 	sc.connect(('localhost',35555))
 
 	# 0. select request
-	request = "get_board"
+	request_type = "query_boxes"
+	user_id = getpass.getuser()
+	request = [request_type, user_id]
+	print(messaging.recv_message(sc))
+	messaging.send_message(sc, request)
+
+	# 1. query output
+	print(messaging.recv_message(sc))
+
+
+print(20 * "=")
+
+with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
+	sc.connect(('localhost',35555))
+
+	# 0. select request
+	request_type = "get_board"
+	user_id = getpass.getuser()
+	request = [request_type, user_id]
 	print(messaging.recv_message(sc))
 	messaging.send_message(sc, request)
 
