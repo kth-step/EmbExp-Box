@@ -8,28 +8,32 @@
 		"boards": {
 			"RPi3_0": {
 				"Type": "RPi3",
-				"JTAG_UART_Serial": "FT0ULYQA",
+				"jtag_minimodule_serialnumber": "FT0ULYQA",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0ULYQA-if01-port0",
 				"pin_reset": 5,
 				"MAC": "b8:27:eb:ae:84:9b",
 				"TFTBOOT": "79ae849b"
 			},
 			"RPi3_1": {
 				"Type": "RPi3",
-				"JTAG_UART_Serial": "FT0V2AMU",
+				"jtag_minimodule_serialnumber": "FT0V2AMU",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0V2AMU-if01-port0",
 				"pin_reset": 6,
 				"MAC": "b8:27:eb:3e:32:b9",
 				"TFTBOOT": "ce3e32b9"
 			},
 			"RPi3_2": {
 				"Type": "RPi3",
-				"JTAG_UART_Serial": "FT1OSQAT",
+				"jtag_minimodule_serialnumber": "FT1OSQAT",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSQAT-if01-port0",
 				"pin_reset": 4,
 				"MAC": "b8:27:eb:64:8f:61",
 				"TFTBOOT": "7c648f61"
 			},
 			"RPi2_0": {
 				"Type": "RPi2",
-				"JTAG_UART_Serial": "FTXK0VDJ",
+				"jtag_minimodule_serialnumber": "FTXK0VDJ",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FTXK0VDJ-if01-port0",
 				"pin_reset": 3,
 				"MAC": "b8:27:eb:ba:2f:58",
 				"TFTBOOT": "08ba2f58"
