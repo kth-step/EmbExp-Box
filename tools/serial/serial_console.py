@@ -2,14 +2,17 @@
 
 import sys
 import serial
+import argparse
 
+# parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("serdev", help="path to the serial device")
+parser.add_argument("baudrate", help="baudrate to use", type=int)
+args = parser.parse_args()
 
-if len(sys.argv) <= 2:
-	print("Usage: serial.py {serial device} {baudrate}")
-	exit(-1)
-
-serdev = sys.argv[1]
-serbaud = int(sys.argv[2])
+# argument variables
+serdev = args.serdev
+serbaud = args.baudrate
 
 print(f"serdev={serdev}")
 print(f"serbaud={serbaud}")

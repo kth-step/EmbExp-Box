@@ -4,6 +4,7 @@ import sys
 import os
 sys.path.append(os.path.join(os.path.dirname(__file__), "../lib"))
 
+import argparse
 import socket
 import getpass
 import tempfile
@@ -13,14 +14,15 @@ import messaging
 import boxconfig
 import toolwrapper
 
+# parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--interactive", help="interactive testing, decide waiting time manually", action="store_true")
+args = parser.parse_args()
 
-config = boxconfig.BoxConfig()
+# argument variables
+interactive = args.interactive
 
-interactive = False
-if len(sys.argv) > 1 and sys.argv[1] != "0":
-	interactive = True
-
-
+# helper functions
 def tryOpenOcd(board_id, sleep):
 	path = config.get_boxpath("interface/openocd.py")
 	with tempfile.TemporaryFile() as logfile:
