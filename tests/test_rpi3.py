@@ -10,6 +10,7 @@ import getpass
 
 import messaging
 import boxtest
+import boxportdistrib
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -25,7 +26,7 @@ config = boxconfig.BoxConfig()
 # run test sequence
 failed = False
 with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
-	sc.connect(('localhost',35555))
+	sc.connect(('localhost', boxportdistrib.get_port_box_server()))
 
 	# 0. select request
 	request_type = "get_board"

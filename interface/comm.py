@@ -9,6 +9,7 @@ import subprocess
 
 import boxconfig
 import toolwrapper
+import boxportdistrib
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -41,8 +42,8 @@ print(f"serbaud={serbaud}")
 
 
 board_idx = config.get_board(board_id)['index']
-if board_idx > 99:
-	assert False
+if board_idx < 0 or 99 < board_idx:
+	raise Exception("board index is not usable (out of range)")
 
 
 
@@ -67,10 +68,10 @@ if interactive:
 
 
 
-port = 20000 + board_idx * 100 + 88
+(comm_port, _) = boxportdistrib.get_ports_box_server_board(board_idx)
 
 cmd = config.get_boxpath("tools/serial/tcp_serial_redirect.py")
-cmdLine = [cmd, "-P", str(port), serdev, str(serbaud)]
+cmdLine = [cmd, "-P", str(comm_port), serdev, str(serbaud)]
 
 toolwrapper.SimpleWrapper(cmdLine, timeout=5)
 

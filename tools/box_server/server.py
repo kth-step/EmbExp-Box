@@ -9,6 +9,7 @@ import logging
 
 import boxconfig
 import boxserver
+import boxportdistrib
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -24,5 +25,5 @@ else:
 # start server
 config = boxconfig.BoxConfig()
 server = boxserver.BoxServer(config)
-server.start(35555)
+server.start(boxportdistrib.get_port_box_server())
 

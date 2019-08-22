@@ -9,6 +9,7 @@ import subprocess
 
 import boxconfig
 import toolwrapper
+import boxportdistrib
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -44,14 +45,15 @@ else:
 
 
 board_idx = config.get_board(board_id)['index']
-if board_idx > 99:
-	assert False
-base_port = 20000 + board_idx * 100
+if board_idx < 0 or 99 < board_idx:
+	raise Exception("board index is not usable (out of range)")
+
+(_, ((oocd_gdb_port_base,oocd_gdb_port_len), oocd_telnet_port, oocd_tcl_port)) = boxportdistrib.get_ports_box_server_board(board_idx)
 
 print(jtag_ftdi_serial)
 print(board_id)
 print(board_idx)
-print(base_port)
+print(((oocd_gdb_port_base,oocd_gdb_port_len), oocd_telnet_port, oocd_tcl_port))
 print(20 * "=")
 
 os.chdir(config.get_boxpath("tools"))
@@ -59,9 +61,9 @@ os.chdir(config.get_boxpath("tools"))
 board_type = board_params["Type"]
 interface_cfg         = interface_cfg_dict[board_type]
 command_interface_sel = ["-c", "ftdi_serial %s" % jtag_ftdi_serial]
-commands_ports        = ["-c", "tcl_port %d"    % (base_port + 66), \
-			 "-c", "gdb_port %d"    % (base_port + 33), \
-			 "-c", "telnet_port %d" % (base_port + 44)]
+commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
+			 "-c", "gdb_port %d"    % (oocd_gdb_port_base), \
+			 "-c", "telnet_port %d" % (oocd_telnet_port)]
 target_cfg            = target_cfg_dict[board_type]
 
 cmd_list = ["openocd/src/openocd", "-f", interface_cfg] + command_interface_sel + commands_ports + ["-f", target_cfg]
