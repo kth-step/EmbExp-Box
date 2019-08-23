@@ -23,7 +23,7 @@ else:
 	logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 
 # start server
-config = boxconfig.BoxConfig()
+config = boxconfig.BoxConfig(only_active=True)
 server = boxserver.BoxServer(config)
 server.start(boxportdistrib.get_port_box_server())
 
