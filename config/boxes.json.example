@@ -44,6 +44,19 @@
 				"TFTBOOT": "08ba2f58"
 			}
 		}
+	},
+	"nobox": {
+		"active": false,
+		"time_powerup_wait": 2,
+		"time_poweroff_delay": 300,
+		"boards": {
+			"LPC11C24_0": {
+				"active": true,
+				"Type": "LPC11C24",
+				"jtag_cmsisdap_serialnumber": "01005022",
+				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_01005022-if01"
+			}
+		}
 	}
 }
 
