@@ -129,12 +129,18 @@ class BoxServer:
 			# claimed and initialize, inform the client
 			messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
 
+			commands = []
+			if 'pin_reset' in self.config.get_board(board_id).keys():
+				commands = ["stop", "start"]
+
 			while True:
 				# 4. send available commands
-				messaging.send_message(sc, ["stop", "start"])
+				messaging.send_message(sc, commands)
 
 				# 5. receive selected command and act
 				command = messaging.recv_message(sc)
+				if not command in commands:
+					raise Exception("input error, requested command is not available")
 				if command == "stop":
 					self.set_board_reset(board_id, True)
 				if command == "start":
