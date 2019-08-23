@@ -47,8 +47,6 @@
 	},
 	"nobox": {
 		"active": false,
-		"time_powerup_wait": 2,
-		"time_poweroff_delay": 300,
 		"boards": {
 			"LPC11C24_0": {
 				"active": true,

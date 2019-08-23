@@ -161,8 +161,12 @@ class BoxServer:
 		# collect all unclaimed boards from this box
 		unclaimedBoards = set(filter(lambda b: b[0] == box_id, self.config.get_boards_ids())) - self.claimed_boards
 		# timing: delay for box powerup and poweroff (in seconds)
-		powerup_waittime = self.config.get_box(box_id)["time_powerup_wait"]
-		poweroff_delay = self.config.get_box(box_id)["time_poweroff_delay"]
+		powerup_waittime = 0
+		if "time_powerup_wait" in self.config.get_box(box_id).keys():
+			powerup_waittime = self.config.get_box(box_id)["time_powerup_wait"]
+		poweroff_delay = -1
+		if "time_poweroff_delay" in self.config.get_box(box_id).keys():
+			poweroff_delay = self.config.get_box(box_id)["time_poweroff_delay"]
 
 		if withTimer:
 			if on:
@@ -176,12 +180,13 @@ class BoxServer:
 				for board_id in unclaimedBoards:
 					self.set_board_reset(board_id, True)
 			else:
-				logging.info(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
-				if self.poweroff_timer != None:
-					self.poweroff_timer.cancel()
-				self.poweroff_timer_boxes.add(box_id)
-				self.poweroff_timer = threading.Timer(poweroff_delay, self.set_box_power_off_timer)
-				self.poweroff_timer.start()
+				if poweroff_delay >= 0:
+					logging.info(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
+					if self.poweroff_timer != None:
+						self.poweroff_timer.cancel()
+					self.poweroff_timer_boxes.add(box_id)
+					self.poweroff_timer = threading.Timer(poweroff_delay, self.set_box_power_off_timer)
+					self.poweroff_timer.start()
 		elif not on:
 			logging.info(f"powering off {box_id} for real now, time expired")
 			self.box_controllers[box_id].set_power(False)
