@@ -1,5 +1,6 @@
 {
 	"Box1": {
+		"active": true,
 		"pin_controller": "/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0",
 		"pin_power": 2,
 		"pin_fan": 13,
@@ -7,6 +8,7 @@
 		"time_poweroff_delay": 300,
 		"boards": {
 			"RPi3_0": {
+				"active": true,
 				"Type": "RPi3",
 				"jtag_minimodule_serialnumber": "FT0ULYQA",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0ULYQA-if01-port0",
@@ -15,6 +17,7 @@
 				"TFTBOOT": "79ae849b"
 			},
 			"RPi3_1": {
+				"active": true,
 				"Type": "RPi3",
 				"jtag_minimodule_serialnumber": "FT0V2AMU",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0V2AMU-if01-port0",
@@ -23,6 +26,7 @@
 				"TFTBOOT": "ce3e32b9"
 			},
 			"RPi3_2": {
+				"active": true,
 				"Type": "RPi3",
 				"jtag_minimodule_serialnumber": "FT1OSQAT",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSQAT-if01-port0",
@@ -31,6 +35,7 @@
 				"TFTBOOT": "7c648f61"
 			},
 			"RPi2_0": {
+				"active": true,
 				"Type": "RPi2",
 				"jtag_minimodule_serialnumber": "FTXK0VDJ",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FTXK0VDJ-if01-port0",
