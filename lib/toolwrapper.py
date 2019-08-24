@@ -13,11 +13,12 @@ class ToolWrapperEndedException(Exception):
 
 # a headless toolwrapper that can only write its outputs to a file
 class ToolWrapper:
-	def __init__(self, path, args, logfile, terminate_timeout):
+	def __init__(self, path, args, logfile, terminate_timeout, killallowed=False):
 		self.path = path
 		self.args = args
 		self.logfile = logfile
 		self.terminate_timeout = terminate_timeout
+		self.killallowed = killallowed
 		self.started = False
           
 	def __enter__(self): 
@@ -30,6 +31,10 @@ class ToolWrapper:
 			try:
 				self.p.communicate(timeout=self.terminate_timeout)
 			except subprocess.TimeoutExpired:
+				if not self.killallowed:
+					# this should not have any effect
+					self.terminate()
+					raise
 				self.kill()
 		except ToolWrapperEndedException:
 			pass
@@ -63,6 +68,9 @@ class ToolWrapper:
 			logging.warning(f"toolwrapper for {self.path} is already shut down")
 
 	def kill(self):
+		if not self.killallowed:
+			raise Exception("killing the process is not allowed for this instance")
+
 		self.check_running()
 		if self.p.poll() == None:
 			self.p.kill()

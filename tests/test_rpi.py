@@ -11,17 +11,30 @@ import getpass
 import messaging
 import boxtest
 import boxportdistrib
+import boxconfig
 
 # parse arguments
 parser = argparse.ArgumentParser()
+parser.add_argument("board_type", help="type of board to test (ex: RPi3)")
 parser.add_argument("-i", "--interactive", help="interactive testing, decide waiting time manually", action="store_true")
+parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
 args = parser.parse_args()
 
 # argument variables
 interactive = args.interactive
+board_type = args.board_type
+verbose = args.verbose
 
 # load config
 config = boxconfig.BoxConfig()
+
+# colored output
+OKGREEN = '\033[92m'
+FAIL = '\033[91m'
+ENDC = '\033[0m'
+SUCCESS = OKGREEN + "SUCCESS" + ENDC
+FAILED = FAIL + "FAILED" + ENDC
+
 
 # run test sequence
 failed = False
@@ -39,7 +52,7 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 	print(messaging.recv_message(sc))
 
 	# 2a. select type
-	messaging.send_message(sc, "RPi3")
+	messaging.send_message(sc, board_type)
 
 	# 2b. available boards for the selected type
 	print(messaging.recv_message(sc))
@@ -64,17 +77,17 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 
 	print("=" * 20)
 	# wait for network boot
-	if tryCommRpi3(config.get_boxpath("."), interactive, board_id, 15):
-		print("SUCCESS: Comm")
+	if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 15):
+		print(SUCCESS + ": Comm")
 	else:
-		print("FAILED: Comm")
+		print(FAILED + ": Comm")
 		failed = True
 
 	print("=" * 20)
-	if tryOpenOcd(config.get_boxpath("."), interactive, board_id, 5):
-		print("SUCCESS: OpenOCD")
+	if boxtest.tryOpenOcd(verbose, config.get_boxpath("."), interactive, board_id, 5):
+		print(SUCCESS + ": OpenOCD")
 	else:
-		print("FAILED: OpenOCD")
+		print(FAILED + ": OpenOCD")
 		failed = True
 
 	print("=" * 20)
@@ -83,10 +96,10 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 
 print("=" * 20)
 if failed:
-	print("FAILED")
+	print(FAILED)
 	exit(-2)
 else:
-	print("SUCCESS")
+	print(SUCCESS)
 	exit(0)
 
 

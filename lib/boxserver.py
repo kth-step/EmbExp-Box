@@ -8,7 +8,6 @@ import logging
 
 import messaging
 import boxgpio
-import toolwrapper
 
 class BoardNotAvailableException(Exception):
 	pass
