@@ -4,10 +4,10 @@ import threading
 import _thread
 import time
 import os
+import logging
 
 import messaging
 import boxgpio
-import toolwrapper
 
 class BoardNotAvailableException(Exception):
 	pass
@@ -20,6 +20,7 @@ class BoxServer:
 		self.lock = threading.Lock()
 		# the set of claimed boards, is protected by the lock
 		self.claimed_boards = set()
+		self.claimed_last_by_user = {}
 		# the gpio objects per box
 		self.box_controllers = {}
 		for box_id in self.config.boxes.keys():
@@ -34,9 +35,10 @@ class BoxServer:
 			s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 			s.bind(('0.0.0.0', port))
 			s.listen(5)
-			print(f'Listing on port {port}...')
+			logging.info(f'Listing on port {port}...')
 
-			
+			self.request_handlers = { "get_board": self.socket_handle_get_board, \
+						  "query_boxes": self.socket_handle_query_boxes }
 
 			while True:
 				# spawn a handler thread for each new connection
@@ -47,80 +49,108 @@ class BoxServer:
 	def socket_handle(self, sc, addr):
 		try:
 			with sc:
-				print(f"Connection established to {addr[0]}:{addr[1]}")
+				logging.info(f"Connection established to {addr[0]}:{addr[1]}")
 				#while True:
 				#	messaging.send_message(sc, messaging.recv_message(sc))
 
 				# 0a. send available request types
-				messaging.send_message(sc, ["get_board"])
+				request_types = list(self.request_handlers.keys())
+				messaging.send_message(sc, request_types)
 				
 				# 0b. receive request type
 				request = messaging.recv_message(sc)
-				if request != "get_board":
-					raise Exception("input error, request not available")
+				if not isinstance(request, list) and len(request) != 2:
+					raise Exception("input error, request has to contain the request type and a user_id")
+				request_type = request[0]
+				user_id = request[1]
+				if not request_type in request_types:
+					raise Exception("input error, request type not available")
 
-				# 1. send available board types
-				board_types = self.config.get_board_types()
-				messaging.send_message(sc, board_types)
+				self.request_handlers[request_type](sc, user_id)
 
-				# 2a. receive required board
-				board_type = messaging.recv_message(sc)
-				if not board_type in board_types:
-					raise Exception("input error, requested board type is not available")
-
-				# 2b. send available board_ids
-				board_ids = set(self.config.get_boards(board_type))
-				with self.lock: # for safety under the lock
-					board_ids = board_ids - self.claimed_boards
-				board_ids = list(board_ids)
-				messaging.send_message(sc, board_ids)
-
-				# 2c. take selection as "wish index" relative to the list of boards sent before, unless negative
-				user_idx = messaging.recv_message(sc)
-				if not isinstance(user_idx, int):
-					raise Exception("input format error, board_index")
-				if (user_idx >= 0) and (user_idx >= len(board_ids)):
-					raise Exception("input format error, board_index")
-
-				# 3. claim one from the available boards and send its name
-				board_id = -1
-				try:
-					# calim board
-					try:
-						board_id = self.claim_board(board_ids, user_idx)
-					except BoardNotAvailableException:
-						print(f"No {board_type} available")
-						messaging.send_message(sc, [-1,board_id,"no board available"])
-						return
-					#initialize board
-					try:
-						self.init_board(board_id)
-					except:
-						print(f"Error while initializing {board_id}")
-						messaging.send_message(sc, [-2,board_id,"could not initialize board"])
-						raise
-					# claimed and initialize, inform the client
-					messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
-
-					while True:
-						# 4. send available commands
-						messaging.send_message(sc, ["stop", "start"])
-
-						# 5. receive selected command and act
-						command = messaging.recv_message(sc)
-						if command == "stop":
-							self.set_board_reset(board_id, True)
-						if command == "start":
-							self.set_board_reset(board_id, False)
-				except messaging.SocketDiedException:
-					pass
-				except ConnectionResetError:
-					pass
-				finally:
-					# always yield the board here
-					self.yield_board(board_id)
 		finally:
-			print(f"Connection lost with {addr[0]}:{addr[1]}")
+			logging.info(f"Connection lost with {addr[0]}:{addr[1]}")
+
+
+	def socket_handle_query_boxes(self, sc, user_id):
+		board_ids = set(self.config.get_boards_ids())
+		with self.lock:
+			claimed_boards = self.claimed_boards
+			claimed_last_by_user = self.claimed_last_by_user
+		board_ids_unclaimed = board_ids - claimed_boards
+		board_ids_to_users = []
+		for board_id in claimed_boards:
+			board_ids_to_users.append([board_id, claimed_last_by_user[board_id]])
+		messaging.send_message(sc, {"unclaimed": list(board_ids_unclaimed), "claimed": board_ids_to_users})
+
+
+	def socket_handle_get_board(self, sc, user_id):
+		# 1. send available board types
+		board_types = self.config.get_board_types()
+		messaging.send_message(sc, board_types)
+
+		# 2a. receive required board
+		board_type = messaging.recv_message(sc)
+		if not board_type in board_types:
+			raise Exception("input error, requested board type is not available")
+
+		# 2b. send available board_ids
+		board_ids = set(self.config.get_boards(board_type))
+		with self.lock: # for safety under the lock
+			board_ids = board_ids - self.claimed_boards
+		board_ids = list(board_ids)
+		messaging.send_message(sc, board_ids)
+
+		# 2c. take selection as "wish index" relative to the list of boards sent before, unless negative
+		user_idx = messaging.recv_message(sc)
+		if not isinstance(user_idx, int):
+			raise Exception("input format error, board_index")
+		if (user_idx >= 0) and (user_idx >= len(board_ids)):
+			raise Exception("input format error, board_index")
+
+		# 3. claim one from the available boards and send its name
+		board_id = -1
+		try:
+			# calim board
+			try:
+				board_id = self.claim_board(user_id, board_ids, user_idx)
+			except BoardNotAvailableException:
+				logging.warning(f"No {board_type} available")
+				messaging.send_message(sc, [-1,board_id,"no board available"])
+				return
+			#initialize board
+			try:
+				self.init_board(board_id)
+			except:
+				logging.error(f"Error while initializing {board_id}")
+				messaging.send_message(sc, [-2,board_id,"could not initialize board"])
+				raise
+			# claimed and initialize, inform the client
+			messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
+
+			commands = []
+			if 'pin_reset' in self.config.get_board(board_id).keys():
+				commands = ["stop", "start"]
+
+			while True:
+				# 4. send available commands
+				messaging.send_message(sc, commands)
+
+				# 5. receive selected command and act
+				command = messaging.recv_message(sc)
+				if not command in commands:
+					raise Exception("input error, requested command is not available")
+				if command == "stop":
+					self.set_board_reset(board_id, True)
+				if command == "start":
+					self.set_board_reset(board_id, False)
+		except messaging.SocketDiedException:
+			pass
+		except ConnectionResetError:
+			pass
+		finally:
+			# always yield the board here
+			self.yield_board(board_id)
 
 
 	# this function has to be called from within the "box management lock"
@@ -130,29 +160,34 @@ class BoxServer:
 		# collect all unclaimed boards from this box
 		unclaimedBoards = set(filter(lambda b: b[0] == box_id, self.config.get_boards_ids())) - self.claimed_boards
 		# timing: delay for box powerup and poweroff (in seconds)
-		powerup_waittime = self.config.get_timing("box_powerup_wait")
-		poweroff_delay = self.config.get_timing("box_poweroff_delay")
+		powerup_waittime = 0
+		if "time_powerup_wait" in self.config.get_box(box_id).keys():
+			powerup_waittime = self.config.get_box(box_id)["time_powerup_wait"]
+		poweroff_delay = -1
+		if "time_poweroff_delay" in self.config.get_box(box_id).keys():
+			poweroff_delay = self.config.get_box(box_id)["time_poweroff_delay"]
 
 		if withTimer:
 			if on:
-				print(f"powering on {box_id}")
+				logging.info(f"powering on {box_id}")
 				self.box_controllers[box_id].set_power(True)
 				time.sleep(powerup_waittime)
 				if box_id in self.poweroff_timer_boxes:
-					print(f"removing {box_id} from poweroff list")
+					logging.debug(f"removing {box_id} from poweroff list")
 					self.poweroff_timer_boxes.remove(box_id)
 				# turn off all unclaimed boards
 				for board_id in unclaimedBoards:
 					self.set_board_reset(board_id, True)
 			else:
-				print(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
-				if self.poweroff_timer != None:
-					self.poweroff_timer.cancel()
-				self.poweroff_timer_boxes.add(box_id)
-				self.poweroff_timer = threading.Timer(poweroff_delay, self.set_box_power_off_timer)
-				self.poweroff_timer.start()
+				if poweroff_delay >= 0:
+					logging.info(f"setting timer to power off {box_id} in {poweroff_delay} seconds")
+					if self.poweroff_timer != None:
+						self.poweroff_timer.cancel()
+					self.poweroff_timer_boxes.add(box_id)
+					self.poweroff_timer = threading.Timer(poweroff_delay, self.set_box_power_off_timer)
+					self.poweroff_timer.start()
 		elif not on:
-			print(f"powering off {box_id} for real now, time expired")
+			logging.info(f"powering off {box_id} for real now, time expired")
 			self.box_controllers[box_id].set_power(False)
 		else:
 			# we should never get here beause of our lock
@@ -169,40 +204,21 @@ class BoxServer:
 
 
 	def set_board_reset(self, board_id, reset):
-		(box_id,_) = board_id
-		pin_reset = self.config.get_board(board_id)['pin_reset']
+		(box_id,board_name) = board_id
 		if reset:
-			print(f"resetting {board_id}")
+			logging.info(f"resetting {board_id}")
 		else:
-			print(f"running {board_id}")
-		self.box_controllers[box_id].set_pin(pin_reset, not reset)
+			logging.info(f"running {board_id}")
+		self.box_controllers[box_id].set_board_reset(board_name, reset)
 
 
 	def init_board(self, board_id):
 		# initialize to reset
 		self.set_board_reset(board_id, True)
-		# timing
-		oocd_runtime = self.config.get_timing("board_init_oocd_run")
-		oocd_termtime = self.config.get_timing("board_init_oocd_term")
-		# initialize openocd
-		logfilename = "boxserver.py_oocdinit_brd_" + str(self.config.get_board(board_id)['index']) + ".log"
-		logpath = os.path.join(self.logdir,logfilename)
-		oocdpath = self.config.get_boxpath("interface/openocd.py")
-		with open(logpath, 'w') as logfile:
-			with toolwrapper.ToolWrapper(oocdpath, list(board_id), logfile, oocd_termtime) as oocdwrapper:
-				print(f"oocd init {board_id} --- logging: {logpath}")
-				oocdwrapper.wait(oocd_runtime)
-		with open(logpath, 'r') as logfile:
-			found = False
-			for line in logfile:
-				if "STICKY ERROR" in line:
-					found = True
-					break
-			if not found:
-				raise Exception("openocd could not initialize the jtag port according to the output")
+		# no more initialization for now
 
 
-	def claim_board(self, board_ids, idx=-1):
+	def claim_board(self, user_id, board_ids, idx=-1):
 		# have to determine which ones are not in use, turn on the box maybe
 		with self.lock:
 			# first select a board
@@ -216,6 +232,8 @@ class BoxServer:
 			# check whether selection is already claimed
 			if board_id in self.claimed_boards:
 				raise BoardNotAvailableException()
+			# register the user_id
+			self.claimed_last_by_user[board_id] = user_id
 			(box_id,_) = board_id
 			# ... and add it to the claimed set
 			self.claimed_boards.add(board_id)
@@ -226,7 +244,7 @@ class BoxServer:
 				self.claimed_boards.remove(board_id)
 				raise
 
-		print(f"claimed {board_id}")
+		logging.info(f"claimed {board_id}")
 		return board_id
 
 
@@ -235,7 +253,7 @@ class BoxServer:
 		with self.lock:
 			# just return if it is not really claimed yet
 			if not (board_id in self.claimed_boards):
-				print(f"yielding but not claimed: {board_id}")
+				logging.error(f"yielding but not claimed: {board_id}")
 				return
 			(box_id,_) = board_id
 			# remove it from the claimed set
@@ -248,6 +266,6 @@ class BoxServer:
 			# have to turn off the box (if not needed) within the lock
 			self.set_box_power(box_id)
 
-		print(f"yielded {board_id}")
+		logging.info(f"yielded {board_id}")
 
 

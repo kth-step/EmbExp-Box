@@ -1,7 +1,0 @@
-{
-	"box_powerup_wait":       3,
-	"box_poweroff_delay":     60,
-
-	"board_init_oocd_run":    3,
-	"board_init_oocd_term":   3
-}

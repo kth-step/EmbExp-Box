@@ -1,0 +1,61 @@
+{
+	"Box1": {
+		"active": true,
+		"pin_controller": "/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0",
+		"pin_power": 2,
+		"pin_fan": 13,
+		"time_powerup_wait": 2,
+		"time_poweroff_delay": 300,
+		"boards": {
+			"RPi3_0": {
+				"active": true,
+				"Type": "RPi3",
+				"jtag_minimodule_serialnumber": "FT0ULYQA",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0ULYQA-if01-port0",
+				"pin_reset": 5,
+				"MAC": "b8:27:eb:ae:84:9b",
+				"TFTBOOT": "79ae849b"
+			},
+			"RPi3_1": {
+				"active": true,
+				"Type": "RPi3",
+				"jtag_minimodule_serialnumber": "FT0V2AMU",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0V2AMU-if01-port0",
+				"pin_reset": 6,
+				"MAC": "b8:27:eb:3e:32:b9",
+				"TFTBOOT": "ce3e32b9"
+			},
+			"RPi3_2": {
+				"active": true,
+				"Type": "RPi3",
+				"jtag_minimodule_serialnumber": "FT1OSQAT",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSQAT-if01-port0",
+				"pin_reset": 4,
+				"MAC": "b8:27:eb:64:8f:61",
+				"TFTBOOT": "7c648f61"
+			},
+			"RPi2_0": {
+				"active": true,
+				"Type": "RPi2",
+				"jtag_minimodule_serialnumber": "FTXK0VDJ",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FTXK0VDJ-if01-port0",
+				"pin_reset": 3,
+				"MAC": "b8:27:eb:ba:2f:58",
+				"TFTBOOT": "08ba2f58"
+			}
+		}
+	},
+	"nobox": {
+		"active": false,
+		"boards": {
+			"LPC11C24_0": {
+				"active": true,
+				"Type": "LPC11C24",
+				"jtag_cmsisdap_serialnumber": "01005022",
+				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_01005022-if01"
+			}
+		}
+	}
+}
+
+
