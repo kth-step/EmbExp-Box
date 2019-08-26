@@ -5,6 +5,9 @@
 # log files
 logs
 
+# ssh control sockets
+ssh
+
 # config files
 config/boxes.json
 config/networks.json
