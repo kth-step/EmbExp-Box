@@ -77,7 +77,8 @@ with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 
 	print("=" * 20)
 	# wait for network boot
-	if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 15):
+	# TODO: have the try comm check the output of the comm and timeout after 20s
+	if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 20):
 		print(SUCCESS + ": Comm")
 	else:
 		print(FAILED + ": Comm")

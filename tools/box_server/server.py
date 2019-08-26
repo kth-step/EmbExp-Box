@@ -25,5 +25,10 @@ else:
 # start server
 config = boxconfig.BoxConfig(only_active=True)
 server = boxserver.BoxServer(config)
-server.start(boxportdistrib.get_port_box_server())
+
+try:
+	server.start(boxportdistrib.get_port_box_server())
+except KeyboardInterrupt:
+	logging.info("keyboard interrupt, stopping server")
+
 
