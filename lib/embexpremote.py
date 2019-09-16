@@ -4,6 +4,7 @@ import os
 import threading
 import time
 import logging
+import socket
 
 import boxclient
 import boxportdistrib
@@ -61,19 +62,57 @@ class EmbexpRemote:
 
 	def startup(self):
 		embexptools.launch_embexp_comm(self.master, self.boxc.get_board_idx(), self.boxc.get_board_id(), lambda: self.on_error("comm"))
+		local_commport = boxportdistrib.get_ports_box_server_board_client(self.master.instance_idx)[0]
+		boot_timeout = 20
+		print(f"timeout for bootup is {boot_timeout}s")
+		# TODO: the following timeout is a fix for probably wrong ssh usage, should we use -f ? how to handle if the remote port is not available?
+		time.sleep(2)
 
-		self.boxc.board_start()
-		print("connected")
-		print()
+		sc = None
+		try:
+			connected = False
+			for i in range(5):
+				try:
+					logging.info(f"round #{i}")
+					sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+					#sc.settimeout(1)
+					sc.connect(("localhost", local_commport))
+					connected = True
+					break
+				except ConnectionRefusedError:
+					logging.info(f"could not connect {i+1} times")
+					time.sleep(2)
+			if not connected:
+				logging.critical(f"could not connect after {i+1} tries")
+				raise Exception("Connection to comm could not be established")
 
-		boot_time = 15
-		print(f"waiting for bootup ({boot_time}s)")
-		sys.stdout.flush()
-		for i in range(boot_time):
-			print(".", end='')
+			sc.settimeout(boot_timeout)
+
+			# start board (starts boot process)
+			self.boxc.board_start()
+			print("connected and booting")
+			print()
 			sys.stdout.flush()
-			time.sleep(1)
-		print()
+
+			found = 0
+			while True:
+				line = ""
+				while not line.endswith('\n'):
+					line = line + sc.recv(1).decode('ascii')
+				#print(line)
+				print(".", end='')
+				sys.stdout.flush()
+				if "Waiting for JTAG" in line:
+					found = found + 1
+				if "Init complete #3." in line:
+					found = found + 1
+					if found == 5:
+						break
+			print()
+		except:
+			if sc != None:
+				sc.close()
+			raise
 
 		embexptools.launch_embexp_openocd(self.master, self.boxc.get_board_idx(), self.boxc.get_board_id(), lambda: self.on_error("openocd"))
 		
