@@ -9,17 +9,7 @@ import logging
 
 import embexpremote
 import boxclient
-
-env_var_ssh_port = "EMBEXP_REMOTE_PORT"
-env_var_ssh_host = "EMBEXP_REMOTE_HOST"
-
-# TODO: change this to use the networks.json file
-if (env_var_ssh_port in os.environ) and (env_var_ssh_host in os.environ):
-	ssh_port = os.environ[env_var_ssh_port]
-	ssh_host = os.environ[env_var_ssh_host]
-else:
-	raise Exception("the environment variables for the server are not configured")
-
+import networkconfig
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -38,6 +28,13 @@ if args.verbose:
 	logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 else:
 	logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
+
+# get the last node in the node list
+for node in networkconfig.NetworkConfig().get_node_tuples():
+	#print(node)
+	(node_name, node_port, node_username, node_networkmaster) = node
+	ssh_port = node_port
+	ssh_host = f"{node_username}@{node_name}"
 
 # argument variables
 board_type  = args.board_type

@@ -2,10 +2,12 @@
 	"default_username" : "myuser1",
 	"networks": {
 		"Network1": {
+			"active": true,
 			"master": "host.example.org",
 			"nodes": {
 				"host.example.org": {
-					"port": 22
+					"active": true,
+					"port": 22,
 					"username": "myuser2"
 				}
 			}
