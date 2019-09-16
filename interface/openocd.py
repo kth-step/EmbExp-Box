@@ -28,6 +28,10 @@ target_cfg_dict = {"RPi3"     : config.get_boxpath("config/openocd/target/rpi3.c
                    "RPi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
                    "LPC11C24" : "target/lpc11xx.cfg"}
 
+target_cfg_extra_dict = {"RPi3"     : [], \
+                         "RPi2"     : [], \
+                         "LPC11C24" : ["-c", "adapter_khz 1000"]}
+
 # find jtag serial number
 try:
 	board_params = config.get_board(board_id)
@@ -69,8 +73,9 @@ commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
 			 "-c", "gdb_port %d"    % (oocd_gdb_port_base), \
 			 "-c", "telnet_port %d" % (oocd_telnet_port)]
 target_cfg            = target_cfg_dict[board_type]
+target_cfg_extra      = target_cfg_extra_dict[board_type]
 
-cmd_list = ["../src/openocd", "-f", interface_cfg] + command_interface_sel + commands_ports + ["-f", target_cfg]
+cmd_list = ["../src/openocd", "-f", interface_cfg] + command_interface_sel + commands_ports + ["-f", target_cfg] + target_cfg_extra
 
 toolwrapper.SimpleWrapper(cmd_list, timeout=5)
 

@@ -46,7 +46,7 @@
 		}
 	},
 	"nobox": {
-		"active": false,
+		"active": true,
 		"boards": {
 			"LPC11C24_0": {
 				"active": true,

@@ -36,7 +36,8 @@ except:
 	exit(-1)
 
 serdev = board_params["serial_device"]
-serbaud = 115200
+# TODO: have a better solution for baudrate selection
+serbaud = 9600 if board_params["Type"] == "LPC11C24" else 115200
 print(f"serdev={serdev}")
 print(f"serbaud={serbaud}")
 
