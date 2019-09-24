@@ -34,7 +34,7 @@ for node in networkconfig.NetworkConfig().get_node_tuples():
 	#print(node)
 	(node_name, node_port, node_username, node_networkmaster) = node
 	ssh_port = node_port
-	ssh_host = f"{node_username}@{node_name}"
+	ssh_host = os.path.expandvars(f"{node_username}@{node_name}")
 
 # argument variables
 board_type  = args.board_type
