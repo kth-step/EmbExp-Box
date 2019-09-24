@@ -42,8 +42,11 @@ class SshMaster:
 		ssh_redir_params = [["-L", "127.0.0.1:%d:localhost:%d" % (k, portmap[k])] for k in portmap.keys()]
 		ssh_redir_cmd_list = [item for sublist in ssh_redir_params for item in sublist]
 
+		# use keep alive messages
+		ssh_keep_alive_list = ["-oServerAliveInterval=60"]
+
 		# construct the ssh command
-		self.cmd_list = ["ssh"] + masterssh_cmd_list + ssh_redir_cmd_list + ssh_host_cmd_list
+		self.cmd_list = ["ssh"] + ssh_keep_alive_list + masterssh_cmd_list + ssh_redir_cmd_list + ssh_host_cmd_list
 
 	def __enter__(self):
 		self.start()

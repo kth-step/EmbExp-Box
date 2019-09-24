@@ -78,6 +78,15 @@ make -j4
    - Debian: Adjust `/etc/sysctl.conf`.
      - Add `net.ipv6.conf.all.disable_ipv6 = 1` and then run `sudo sysctl -p`
 
+1. Configure SSH daemon to use keep alive messages.
+   - Adjust `/etc/ssh/sshd_config`.
+     ```
+     TCPKeepAlive yes
+     KeepAlive yes
+     ClientAliveInterval 60
+     ClientAliveCountMax 10
+     ```
+
 
 ## DHCP/TFTP server
 1. Install and setup dnsmasq for DNS and DHCP.
