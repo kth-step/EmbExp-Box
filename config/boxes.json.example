@@ -7,6 +7,12 @@
 		"time_powerup_wait": 2,
 		"time_poweroff_delay": 300,
 		"boards": {
+			"RPi4_0": {
+				"active": false,
+				"Type": "RPi4",
+				"jtag_minimodule_serialnumber": "FT1OSM9B",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSM9B-if01-port0"
+			},
 			"RPi3_0": {
 				"active": true,
 				"Type": "RPi3",
@@ -33,6 +39,14 @@
 				"pin_reset": 4,
 				"MAC": "b8:27:eb:64:8f:61",
 				"TFTBOOT": "7c648f61"
+			},
+			"RPi3_3": {
+				"active": false,
+				"Type": "RPi3",
+				"jtag_minimodule_serialnumber": "FT1OSIJR",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSIJR-if01-port0",
+				"MAC": "b8:27:eb:c4:ba:86",
+				"TFTBOOT": "83c4ba86"
 			},
 			"RPi2_0": {
 				"active": true,

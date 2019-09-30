@@ -24,12 +24,14 @@ board_id  = (args.box_name, args.board_name)
 # load config
 config = boxconfig.BoxConfig()
 
-target_cfg_dict = {"RPi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
-                   "RPi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
+target_cfg_dict = {"RPi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
+                   "RPi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
+                   "RPi4"     : config.get_boxpath("config/openocd/target/rpi4.cfg"), \
                    "LPC11C24" : "target/lpc11xx.cfg"}
 
-target_cfg_extra_dict = {"RPi3"     : [], \
-                         "RPi2"     : [], \
+target_cfg_extra_dict = {"RPi2"     : [], \
+                         "RPi3"     : [], \
+                         "RPi4"     : [], \
                          "LPC11C24" : ["-c", "adapter_khz 1000"]}
 
 # find jtag serial number
