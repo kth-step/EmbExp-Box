@@ -45,6 +45,10 @@ class BoxClient:
 
 			# select board type
 			board_types = messaging.recv_message(self.sc)
+			# fix case insensitive board type
+			board_types_match = list(filter(lambda x: x.lower() == self.board_type.lower(), board_types))
+			if len(board_types_match) == 1:
+				self.board_type = board_types_match[0]
 			if not self.board_type in board_types:
 				raise BoxServerNoBoardException(f"{self.board_type} is no available board type; available types are {board_types}")
 			messaging.send_message(self.sc, self.board_type)
