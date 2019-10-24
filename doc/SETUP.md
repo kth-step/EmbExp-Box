@@ -139,10 +139,12 @@ make -j4
 
 
 ## Final startup configuration
-- Create the file `/etc/rc.local` if it does not exist and execute `chmod +x /etc/rc.local`. Otherwise, just add the line for the startup script in your file.
+- Create the file `/etc/rc.local` if it does not exist and execute `chmod +x /etc/rc.local`. Otherwise, just add the two lines for selecting the experiment network interface and running the startup script in your file.
   ```
   #!/bin/sh -e
   
+  # select experiment network interface
+  export EXPERIMENT_IF=enx00e04c680037
   # line for the startup stript
   /opt/embexp-box/tools/startup/startup.sh
   
@@ -150,7 +152,8 @@ make -j4
   ```
 
 - Configure the firewall
-  - Adjust `{EMBEXP-BOX}/tools/startup/firewall.sh`. At least the experiment interface has to be correctly configured.
+  - Configure the variable EXPERIMENT_IF to match your experiment network interface name. All traffic will be allowed for this interface!
+  - Adjust `{EMBEXP-BOX}/tools/startup/firewall.sh`. (Normally nothing extra needs to be done here.)
 
 - Notice: You may want to copy these startup files somewhere else and execute from there in order to better control modifications to it.
 

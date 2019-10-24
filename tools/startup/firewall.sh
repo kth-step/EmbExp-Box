@@ -1,5 +1,3 @@
-export EXPERIMENT_IF=enx00e04c680037
-
 
 # completely initialize iptables
 iptables -P INPUT ACCEPT
