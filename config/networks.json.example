@@ -1,7 +1,7 @@
 {
 	"default_username" : "myuser1",
 	"networks": {
-		"Network1": {
+		"network1": {
 			"active": true,
 			"master": "host.example.org",
 			"nodes": {

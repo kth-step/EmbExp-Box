@@ -15,7 +15,7 @@ import boxconfig
 
 # parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("board_type", help="type of board to test (ex: RPi3)")
+parser.add_argument("board_type", help="type of board to test (ex: rpi3)")
 parser.add_argument("-i", "--interactive", help="interactive testing, decide waiting time manually", action="store_true")
 parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
 args = parser.parse_args()

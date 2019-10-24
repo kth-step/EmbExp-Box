@@ -24,15 +24,15 @@ board_id  = (args.box_name, args.board_name)
 # load config
 config = boxconfig.BoxConfig()
 
-target_cfg_dict = {"RPi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
-                   "RPi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
-                   "RPi4"     : config.get_boxpath("config/openocd/target/rpi4.cfg"), \
-                   "LPC11C24" : "target/lpc11xx.cfg"}
+target_cfg_dict = {"rpi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
+                   "rpi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
+                   "rpi4"     : config.get_boxpath("config/openocd/target/rpi4.cfg"), \
+                   "lpc11c24" : "target/lpc11xx.cfg"}
 
-target_cfg_extra_dict = {"RPi2"     : [], \
-                         "RPi3"     : [], \
-                         "RPi4"     : [], \
-                         "LPC11C24" : ["-c", "adapter_khz 1000"]}
+target_cfg_extra_dict = {"rpi2"     : [], \
+                         "rpi3"     : [], \
+                         "rpi4"     : [], \
+                         "lpc11c24" : ["-c", "adapter_khz 1000"]}
 
 # find jtag serial number
 try:
@@ -45,7 +45,7 @@ _JTAG_MINIMOD_SERNUM = "jtag_minimodule_serialnumber"
 _JTAG_CMSISDAP_SERNUM = "jtag_cmsisdap_serialnumber"
 if _JTAG_MINIMOD_SERNUM in board_params:
 	jtag_ftdi_serial = board_params[_JTAG_MINIMOD_SERNUM]
-	interface_cfg    = config.get_boxpath("config/openocd/interface/minimodule.cfg")
+	interface_cfg    = "interface/ftdi/minimodule.cfg"
 	command_interface_sel = ["-c", "ftdi_serial %s" % jtag_ftdi_serial]
 elif _JTAG_CMSISDAP_SERNUM in board_params:
 	jtag_cmsis_serial = board_params[_JTAG_CMSISDAP_SERNUM]
@@ -70,7 +70,7 @@ print(20 * "=")
 
 os.chdir(config.get_boxpath("tools/openocd/tcl"))
 
-board_type = board_params["Type"]
+board_type = board_params["type"]
 commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
 			 "-c", "gdb_port %d"    % (oocd_gdb_port_base), \
 			 "-c", "telnet_port %d" % (oocd_telnet_port)]

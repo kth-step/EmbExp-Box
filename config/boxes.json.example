@@ -1,5 +1,5 @@
 {
-	"Box1": {
+	"box1": {
 		"active": true,
 		"pin_controller": "/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0",
 		"pin_power": 2,
@@ -7,64 +7,64 @@
 		"time_powerup_wait": 2,
 		"time_poweroff_delay": 300,
 		"boards": {
-			"RPi4_0": {
+			"rpi4_0": {
 				"active": false,
-				"Type": "RPi4",
+				"type": "rpi4",
 				"jtag_minimodule_serialnumber": "FT1OSM9B",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSM9B-if01-port0"
 			},
-			"RPi3_0": {
+			"rpi3_0": {
 				"active": true,
-				"Type": "RPi3",
+				"type": "rpi3",
 				"jtag_minimodule_serialnumber": "FT0ULYQA",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0ULYQA-if01-port0",
 				"pin_reset": 5,
-				"MAC": "b8:27:eb:ae:84:9b",
-				"TFTBOOT": "79ae849b"
+				"ethernet_mac": "b8:27:eb:ae:84:9b",
+				"ethernet_tftpboot": "79ae849b"
 			},
-			"RPi3_1": {
+			"rpi3_1": {
 				"active": true,
-				"Type": "RPi3",
+				"type": "rpi3",
 				"jtag_minimodule_serialnumber": "FT0V2AMU",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT0V2AMU-if01-port0",
 				"pin_reset": 6,
-				"MAC": "b8:27:eb:3e:32:b9",
-				"TFTBOOT": "ce3e32b9"
+				"ethernet_mac": "b8:27:eb:3e:32:b9",
+				"ethernet_tftpboot": "ce3e32b9"
 			},
-			"RPi3_2": {
+			"rpi3_2": {
 				"active": true,
-				"Type": "RPi3",
+				"type": "rpi3",
 				"jtag_minimodule_serialnumber": "FT1OSQAT",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSQAT-if01-port0",
 				"pin_reset": 4,
-				"MAC": "b8:27:eb:64:8f:61",
-				"TFTBOOT": "7c648f61"
+				"ethernet_mac": "b8:27:eb:64:8f:61",
+				"ethernet_tftpboot": "7c648f61"
 			},
-			"RPi3_3": {
+			"rpi3_3": {
 				"active": false,
-				"Type": "RPi3",
+				"type": "rpi3",
 				"jtag_minimodule_serialnumber": "FT1OSIJR",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSIJR-if01-port0",
-				"MAC": "b8:27:eb:c4:ba:86",
-				"TFTBOOT": "83c4ba86"
+				"ethernet_mac": "b8:27:eb:c4:ba:86",
+				"ethernet_tftpboot": "83c4ba86"
 			},
-			"RPi2_0": {
+			"rpi2_0": {
 				"active": true,
-				"Type": "RPi2",
+				"type": "rpi2",
 				"jtag_minimodule_serialnumber": "FTXK0VDJ",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FTXK0VDJ-if01-port0",
 				"pin_reset": 3,
-				"MAC": "b8:27:eb:ba:2f:58",
-				"TFTBOOT": "08ba2f58"
+				"ethernet_mac": "b8:27:eb:ba:2f:58",
+				"ethernet_tftpboot": "08ba2f58"
 			}
 		}
 	},
 	"nobox": {
 		"active": true,
 		"boards": {
-			"LPC11C24_0": {
+			"lpc11c24_0": {
 				"active": true,
-				"Type": "LPC11C24",
+				"type": "lpc11c24",
 				"jtag_cmsisdap_serialnumber": "01005022",
 				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_01005022-if01"
 			}

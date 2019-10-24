@@ -43,7 +43,7 @@ class BoxConfig:
 		return logdir
 
 	def get_board_types(self):
-		return list(set([board['Type'] for box in self.boxes.values() for board in box['boards'].values()]))
+		return list(set([board['type'] for box in self.boxes.values() for board in box['boards'].values()]))
 
 	def get_boards_ids(self):
 		board_ids = []
@@ -57,7 +57,7 @@ class BoxConfig:
 		box_boards = []
 		for box_k in self.boxes.keys():
 			board_dict = self.boxes[box_k]['boards']
-			filter_boards = filter(lambda boardname: board_dict[boardname]['Type'] == board_type, board_dict)
+			filter_boards = filter(lambda boardname: board_dict[boardname]['type'] == board_type, board_dict)
 			box_boards.extend(list(map(lambda board: (box_k, board), filter_boards)))
 
 		return box_boards
