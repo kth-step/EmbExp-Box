@@ -8,7 +8,7 @@ The software components used here are:
 
 
 ## Setup outline
-Refer to `doc/SETUP.md` for the detailed steps. The essential points are:
+Refer to [`doc/SETUP.md`](doc/SETUP.md) for the detailed steps. The essential points are:
 - Network configuration
 - DHCP/TFTP
 - NFS
@@ -17,11 +17,11 @@ Refer to `doc/SETUP.md` for the detailed steps. The essential points are:
 
 
 ## Box building outline
-Refer to `doc/HARDWARE.md` for the detailed steps.
+Refer to [`doc/HARDWARE.md`](doc/HARDWARE.md) for the detailed steps.
 
 
 ## Maintenance outline
-Refer to `doc/MAINTENANCE.md` for the detailed steps.
+Refer to [`doc/MAINTENANCE.md`](doc/MAINTENANCE.md) for the detailed steps.
 
 
 ## Directory index
