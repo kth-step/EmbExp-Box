@@ -69,4 +69,7 @@ class BoxConfig:
 		(box_name,board_name) = board_id
 		return self.boxes[box_name]['boards'][board_name]
 
+	def get_board_type(self, board_id):
+		return self.get_board(board_id)["type"]
+
 

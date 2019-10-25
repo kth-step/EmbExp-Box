@@ -78,10 +78,11 @@ class BoxServer:
 			claimed_boards = self.claimed_boards
 			claimed_last_by_user = self.claimed_last_by_user
 		board_ids_unclaimed = board_ids - claimed_boards
+		boards_unclaimed = list(map(lambda x: {"id": x, "type": self.config.get_board_type(x)}, board_ids_unclaimed))
 		board_ids_to_users = []
 		for board_id in claimed_boards:
 			board_ids_to_users.append([board_id, claimed_last_by_user[board_id]])
-		messaging.send_message(sc, {"unclaimed": list(board_ids_unclaimed), "claimed": board_ids_to_users})
+		messaging.send_message(sc, {"unclaimed": boards_unclaimed, "claimed": board_ids_to_users})
 
 
 	def socket_handle_get_board(self, sc, user_id):

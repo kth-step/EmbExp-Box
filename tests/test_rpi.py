@@ -13,6 +13,8 @@ import boxtest
 import boxportdistrib
 import boxconfig
 
+import boxclient
+
 # parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("board_type", help="type of board to test (ex: rpi3)")
@@ -38,42 +40,12 @@ FAILED = FAIL + "FAILED" + ENDC
 
 # run test sequence
 failed = False
-with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
-	sc.connect(('localhost', boxportdistrib.get_port_box_server()))
 
-	# 0. select request
-	request_type = "get_board"
-	user_id = getpass.getuser()
-	request = [request_type, user_id]
-	print(messaging.recv_message(sc))
-	messaging.send_message(sc, request)
+assert board_type == "rpi2" or board_type == "rpi3"
+with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type) as boxc:
+	print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
 
-	# 1. available board types
-	print(messaging.recv_message(sc))
-
-	# 2a. select type
-	messaging.send_message(sc, board_type)
-
-	# 2b. available boards for the selected type
-	print(messaging.recv_message(sc))
-
-	# 2c. select board
-	board_id_index = -1
-	messaging.send_message(sc, board_id_index)
-
-	# 3. receive board id or error
-	(board_idx, board_id, msg) = messaging.recv_message(sc)
-	print(f"idx={board_idx}, id={board_id}, msg={msg}")
-
-	if board_idx < 0:
-		print("no board available or error while initializing board")
-		exit(-1)
-
-	print("=" * 20)
-	# 4. receive commands
-	print(messaging.recv_message(sc))
-	# 5. start board
-	messaging.send_message(sc, "start")
+	boxc.board_start()
 
 	print("=" * 20)
 	# wait for network boot

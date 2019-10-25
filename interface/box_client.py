@@ -9,70 +9,42 @@ import getpass
 
 import messaging
 import boxportdistrib
+import boxclient
 
+boxc = boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), None)
+print("boxes of the server")
+print("="*40)
+server_query = boxc.query_server()
+print(server_query["claimed"])
+print()
 
-with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
-	sc.connect(('localhost', boxportdistrib.get_port_box_server()))
+board_type = input("board_type: ")
+board_ids = list(map(lambda x: x["id"], filter(lambda x: x["type"] == board_type, server_query["unclaimed"])))
+if len(boards) == 0:
+	raise Exception("no board to choose from")
 
-	# 0. select request
-	request_type = "query_boxes"
-	user_id = getpass.getuser()
-	request = [request_type, user_id]
-	print(messaging.recv_message(sc))
-	messaging.send_message(sc, request)
+print(board_ids)
+board_idx = input("board index (server chooses if empty): ")
+# select board_id based on idx or (None,None) otherwise
+if board_idx == "":
+	box_name   = None
+	board_name = None
+else:
+	board_id_lst = board_ids[int(board_idx)]
+	box_name   = board_id_lst[0]
+	board_name = board_id_lst[1]
 
-	# 1. query output
-	print(messaging.recv_message(sc))
-
-
-print(20 * "=")
-
-with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
-	sc.connect(('localhost', boxportdistrib.get_port_box_server()))
-
-	# 0. select request
-	request_type = "get_board"
-	user_id = getpass.getuser()
-	request = [request_type, user_id]
-	print(messaging.recv_message(sc))
-	messaging.send_message(sc, request)
-
-	# 1. available board types
-	print(messaging.recv_message(sc))
-
-	# 2a. select type
-	board_type = input("board_type: ")
-	messaging.send_message(sc, board_type)
-
-	# 2b. available boards for the selected type
-	print(messaging.recv_message(sc))
-
-	# 2c. select board
-	board_id_index = input("board (server chooses if empty): ")
-	if board_id_index == "":
-		board_id_index = -1
-	else:
-		board_id_index = int(board_id_index)
-	messaging.send_message(sc, board_id_index)
-
-	# 3. receive board id or error
-	(board_idx, board_id, msg) = messaging.recv_message(sc)
-	print(f"idx={board_idx}, id={board_id}, msg={msg}")
-
-	if board_idx < 0:
-		print("no board available or error while initializing board")
-		exit(-1)
-
-	print("=" * 20)
+with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type, box_name, board_name) as boxc:
+	print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
 
 	while True:
-		# 4. receive commands
-		print(messaging.recv_message(sc))
-
-		# 5. send command
 		command = input("command: ")
 		if command == "":
 			break
-		messaging.send_message(sc, command)
-
+		elif command == "start":
+			boxc.board_start()
+		elif command == "stop":
+			boxc.board_stop()
+		else:
+			print("unknown command")
 
