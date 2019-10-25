@@ -40,7 +40,7 @@ class BoxClient:
 		with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 			sc.connect((self.hostname, self.port))
 
-			result = _request_to_server(sc, "query_boxes")
+			result = BoxClient._request_to_server(sc, "query_boxes")
 			return result
 
 
@@ -56,7 +56,7 @@ class BoxClient:
 
 		try:
 			# select to request a board and select board type
-			board_types = _request_to_server(self.sc, "get_board")
+			board_types = BoxClient._request_to_server(self.sc, "get_board")
 			# fix case insensitive board type
 			board_types_match = list(filter(lambda x: x.lower() == self.board_type.lower(), board_types))
 			if len(board_types_match) == 1:

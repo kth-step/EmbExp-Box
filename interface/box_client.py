@@ -20,7 +20,7 @@ print()
 
 board_type = input("board_type: ")
 board_ids = list(map(lambda x: x["id"], filter(lambda x: x["type"] == board_type, server_query["unclaimed"])))
-if len(boards) == 0:
+if len(board_ids) == 0:
 	raise Exception("no board to choose from")
 
 print(board_ids)

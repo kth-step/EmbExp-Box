@@ -42,29 +42,35 @@ FAILED = FAIL + "FAILED" + ENDC
 failed = False
 
 assert board_type == "rpi2" or board_type == "rpi3"
-with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type) as boxc:
-	print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
+try:
+	with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type) as boxc:
+		print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
+		board_id = boxc.board_id
 
-	boxc.board_start()
+		boxc.board_start()
 
-	print("=" * 20)
-	# wait for network boot
-	# TODO: have the try comm check the output of the comm and timeout after 20s
-	if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 20):
-		print(SUCCESS + ": Comm")
-	else:
-		print(FAILED + ": Comm")
-		failed = True
+		print("=" * 20)
+		# wait for network boot
+		# TODO: have the try comm check the output of the comm and timeout after 20s
+		if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 20):
+			print(SUCCESS + ": Comm")
+		else:
+			print(FAILED + ": Comm")
+			failed = True
 
-	print("=" * 20)
-	if boxtest.tryOpenOcd(verbose, config.get_boxpath("."), interactive, board_id, 5):
-		print(SUCCESS + ": OpenOCD")
-	else:
-		print(FAILED + ": OpenOCD")
-		failed = True
+		print("=" * 20)
+		if boxtest.tryOpenOcd(verbose, config.get_boxpath("."), interactive, board_id, 5):
+			print(SUCCESS + ": OpenOCD")
+		else:
+			print(FAILED + ": OpenOCD")
+			failed = True
 
-	print("=" * 20)
-	print("done")
+		print("=" * 20)
+		print("done")
+except boxclient.BoxServerNoBoardException as e:
+	print(f"could not get board, error: {e}")
+	failed = True
+
 
 
 print("=" * 20)
