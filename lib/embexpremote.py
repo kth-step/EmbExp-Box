@@ -15,13 +15,14 @@ import embexptools
 
 class EmbexpRemote:
 
-	def __init__(self, instance_idx, ssh_host, ssh_port, board_type, box_name = None, board_name = None):
+	def __init__(self, instance_idx, ssh_host, ssh_port, board_type, box_name = None, board_name = None, do_query = False):
 		self.instance_idx = instance_idx
 		self.ssh_host = ssh_host
 		self.ssh_port = ssh_port
 		self.board_type = board_type
 		self.box_name = box_name
 		self.board_name = board_name
+		self.do_query = do_query
 
 		box_server_port_map = {boxportdistrib.get_port_box_server_client(self.instance_idx): boxportdistrib.get_port_box_server()}
 		self.master = sshmaster.SshMaster(self.instance_idx, self.ssh_host, self.ssh_port, \
@@ -40,8 +41,23 @@ class EmbexpRemote:
 		# master fails if it is started twice, so remote can also not be started twice
 		self.master.start()
 		try:
-			print("requesting board from server now")
 			box_server_port_client = boxportdistrib.get_port_box_server_client(self.instance_idx)
+
+			if self.do_query:
+				boxc_tmp = boxclient.BoxClient("localhost", box_server_port_client, self.board_type)
+				server_query = boxc_tmp.query_server()
+				print("claimed boxes at the server")
+				print("="*40)
+				for b in server_query["claimed"]:
+					print(b)
+				print()
+				print("available boxes at the server")
+				print("="*40)
+				for b in server_query["unclaimed"]:
+					print(b)
+				print()
+
+			print("requesting board from server now")
 			self.boxc = boxclient.BoxClient("localhost", box_server_port_client \
 					, self.board_type, box_name=self.box_name, board_name=self.board_name)
 			self.boxc.start()

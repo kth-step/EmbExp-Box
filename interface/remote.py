@@ -17,6 +17,8 @@ parser.add_argument("board_type", help="type of the board to obtain")
 
 parser.add_argument("-idx", "--instance_idx", help="instance index", type=int)
 
+parser.add_argument("-q", "--query", help="query the server first, and print out the result", action="store_true")
+
 parser.add_argument("--box_name", help="name of the box to connect to")
 parser.add_argument("--board_name", help="name of the board to connect to")
 
@@ -56,7 +58,7 @@ ENDC = '\033[0m'
 
 
 try:
-	with embexpremote.EmbexpRemote(instance_idx, ssh_host, ssh_port, board_type, box_name, board_name) as remote:
+	with embexpremote.EmbexpRemote(instance_idx, ssh_host, ssh_port, board_type, box_name, board_name, do_query=args.query) as remote:
 		remote.startup()
 
 		print(OKBLUE)
