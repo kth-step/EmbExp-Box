@@ -28,17 +28,7 @@ Run the following commands.
 
 
 ## Compile OpenOCD
-Run the following commands.
-```
-cd {EMBEXP-BOX}
-git submodule init
-git submodule update
-cd tools/openocd
-git clean -dfx
-./bootstrap
-./configure --enable-jlink --enable-ftdi --enable-stlink --enable-cmsis-dap --enable-openjtag
-make -j4
-```
+Run the following command: `{EMBEXP-BOX}/tools/box_server/compile_openocd.sh`.
 
 
 ## Setup network configuration
