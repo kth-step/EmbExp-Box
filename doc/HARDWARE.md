@@ -12,6 +12,7 @@ See the pictures in [`pictures/box`](pictures/box).
 
 ## A RPi module
 ![RPi module](pictures/rpi/module-1_small.jpg)
+
 See the pictures in [`pictures/rpi`](pictures/rpi).
 
 ### Wiring a RPi with a Mini module
