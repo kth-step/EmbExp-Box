@@ -30,7 +30,7 @@ Refer to [`doc/MAINTENANCE.md`](doc/MAINTENANCE.md) for the detailed steps.
   - OpenOCD configuration files
 - `doc`
   - Setup guide
-  - Hardware guid with pictures
+  - Hardware guide with pictures
   - Maintenance guide
 - `interface`
   - User interface code
