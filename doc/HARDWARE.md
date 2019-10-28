@@ -1,8 +1,8 @@
 # The box
-![The box](doc/pictures/box/box-ext_small.jpg)
+![The box](pictures/box/box-ext_small.jpg)
 
 ## Parts of a box
-See the pictures in [`doc/pictures/box`](doc/pictures/box).
+See the pictures in [`pictures/box`](pictures/box).
 
 * Power supply
 * Fan
@@ -11,8 +11,8 @@ See the pictures in [`doc/pictures/box`](doc/pictures/box).
 * USB Hubs
 
 ## A RPi module
-![RPi module](doc/pictures/rpi/module-1_small.jpg)
-See the pictures in [`doc/pictures/rpi`](doc/pictures/rpi).
+![RPi module](pictures/rpi/module-1_small.jpg)
+See the pictures in [`pictures/rpi`](pictures/rpi).
 
 ### Wiring a RPi with a Mini module
 USB bus power (VBUS to VCC).
