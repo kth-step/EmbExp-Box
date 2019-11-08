@@ -84,51 +84,54 @@ class EmbexpRemote:
 		# TODO: the following timeout is a fix for probably wrong ssh usage, should we use -f ? how to handle if the remote port is not available?
 		time.sleep(2)
 
-		sc = None
-		try:
-			connected = False
-			for i in range(5):
-				try:
-					logging.info(f"round #{i}")
-					sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-					#sc.settimeout(1)
-					sc.connect(("localhost", local_commport))
-					connected = True
-					break
-				except ConnectionRefusedError:
-					logging.info(f"could not connect {i+1} times")
-					time.sleep(2)
-			if not connected:
-				logging.critical(f"could not connect after {i+1} tries")
-				raise Exception("Connection to comm could not be established")
-
-			sc.settimeout(boot_timeout)
-
-			# start board (starts boot process)
-			self.boxc.board_start()
-			print("connected and booting")
-			print()
-			sys.stdout.flush()
-
-			found = 0
-			while True:
-				line = ""
-				while not line.endswith('\n'):
-					line = line + sc.recv(1).decode('ascii')
-				#print(line)
-				print(".", end='')
-				sys.stdout.flush()
-				if "Waiting for JTAG" in line:
-					found = found + 1
-				if "Init complete #3." in line:
-					found = found + 1
-					if found == 5:
+		rpi3waiting = self.board_type == "rpi3"
+		if rpi3waiting:
+			print("waiting for rpi3 to boot up")
+			sc = None
+			try:
+				connected = False
+				for i in range(5):
+					try:
+						logging.info(f"round #{i}")
+						sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+						#sc.settimeout(1)
+						sc.connect(("localhost", local_commport))
+						connected = True
 						break
-			print()
-		except:
-			if sc != None:
-				sc.close()
-			raise
+					except ConnectionRefusedError:
+						logging.info(f"could not connect {i+1} times")
+						time.sleep(2)
+				if not connected:
+					logging.critical(f"could not connect after {i+1} tries")
+					raise Exception("Connection to comm could not be established")
+
+				sc.settimeout(boot_timeout)
+
+				# start board (starts boot process)
+				self.boxc.board_start()
+				print("connected and booting")
+				print()
+				sys.stdout.flush()
+
+				found = 0
+				while True:
+					line = ""
+					while not line.endswith('\n'):
+						line = line + sc.recv(1).decode('ascii')
+					#print(line)
+					print(".", end='')
+					sys.stdout.flush()
+					if "Waiting for JTAG" in line:
+						found = found + 1
+					if "Init complete #3." in line:
+						found = found + 1
+						if found == 5:
+							break
+				print()
+			except:
+				if sc != None:
+					sc.close()
+				raise
 
 		embexptools.launch_embexp_openocd(self.master, self.boxc.get_board_idx(), self.boxc.get_board_id(), lambda: self.on_error("openocd"))
 		
