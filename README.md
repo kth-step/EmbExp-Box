@@ -1,6 +1,7 @@
 # EmbExp-Box - embedded experiments in a box
 The software components used here are:
 - BoxServer: claim and power management
+- BoxRemote: remotely connect to BoxServer
 - SerialRedirector: communication
 - OpenOCD: JTAG gdb debugging
 - DHCP/TFTP: for experiment network, TFTP advertising, and TFTP network boot
