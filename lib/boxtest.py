@@ -43,17 +43,15 @@ def tryComm(verbose, boxpath, interactive, board_id, board_type, sleep):
 		print("=" * 20)
 		# check for successful output
 		logfile.seek(0)
-		if board_type == "rpi3":
+		if board_type == "rpi3" or board_type == "rpi4":
 			found = 0
 			for line in logfile:
 				line = line.decode('ascii')
 				if verbose:
 					print(line, end = '')
-				if "Waiting for JTAG" in line:
+				if "Init complete" in line:
 					found = found + 1
-				if "Init complete #3." in line:
-					found = found + 1
-			return found == 5
+			return found == 4
 		elif board_type == "rpi2":
 			found = 0
 			for line in logfile:

@@ -84,7 +84,7 @@ class EmbexpRemote:
 		# TODO: the following timeout is a fix for probably wrong ssh usage, should we use -f ? how to handle if the remote port is not available?
 		time.sleep(2)
 
-		rpi3waiting = self.board_type == "rpi3"
+		rpi3waiting = self.board_type == "rpi3" or self.board_type == "rpi4"
 		if rpi3waiting:
 			print("waiting for rpi3 to boot up")
 			sc = None
@@ -114,6 +114,7 @@ class EmbexpRemote:
 				sys.stdout.flush()
 
 				found = 0
+				bootmsg = False
 				while True:
 					line = ""
 					while not line.endswith('\n'):
@@ -121,13 +122,16 @@ class EmbexpRemote:
 					#print(line)
 					print(".", end='')
 					sys.stdout.flush()
-					if "Waiting for JTAG" in line:
+					if f"Booting board: {self.board_type}" in line:
+						bootmsg = True
+						#found = found + 1
+					if "Init complete" in line:
 						found = found + 1
-					if "Init complete #3." in line:
-						found = found + 1
-						if found == 5:
+						if found == 4:
 							break
 				print()
+				#if not bootmsg:
+				#	raise Exception("boot message was never seen")
 			except:
 				if sc != None:
 					sc.close()
