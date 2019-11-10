@@ -10,7 +10,7 @@ See the pictures in [`pictures/box`](pictures/box).
 * USB power outlets
 * USB Hubs
 
-## A RPi module
+## A RPi3 module
 ![RPi module](pictures/rpi/module-1_small.jpg)
 
 See the pictures in [`pictures/rpi`](pictures/rpi).
@@ -37,8 +37,50 @@ JTAG (Mini module to RPi)
    * `CN2-10` to `37 (Gpio26/ARM_TDI)`
    * `CN2-12` to `13 (Gpio27/ARM_TMS)`
 
-### Prepare SD card with latest firmware files (enables network boot on every RPi and contains bugfixes)
+### Prepare SD card with latest firmware files (enables network boot on every RPi until "3+" and contains bugfixes)
 From `{EMBEXP-BOX}/tools/rpi-firmware/boot_{thelatest}`, take the file `bootcode.bin` and copy it on an empty FAT32 formatted SD card.
+
+### Flash EEPROM of RPi 4 and configure it to enable network boot
+TODO: add configured EEPROM image in tools/rpi-firmware/custom/rpi4_eeprom/...
+TODO: clean up the following notes
+1. Standard EEPROM update
+   ```
+   sudo apt update
+   sudo apt full-upgrade
+   sudo apt install rpi-eeprom
+
+   sudo apt update
+   sudo apt upgrade
+   sudo apt install rpi-eeprom
+
+   sudo rpi-update
+
+   # Enable beta releases in the standard update process
+   sudo echo FIRMWARE_RELEASE_STATUS="beta" > /etc/default/rpi-eeprom-update
+
+   sudo systemctl mask rpi-eeprom-update
+   ```
+1. Configure EEPROM
+   ```
+   cp /lib/firmware/raspberrypi/bootloader/beta/pieeprom-2019-10-16.bin pieeprom.bin
+   rpi-eeprom-config pieeprom.bin > bootconf.txt
+
+   nano bootconf.txt
+   ############
+   BOOT_UART=1
+   BOOT_ORDER=0x21
+   #probably not needed:
+   TFTP_PREFIX=0
+   ############
+
+   rpi-eeprom-config --out pieeprom-netboot.bin --config bootconf.txt pieeprom.bin
+
+   sudo rpi-eeprom-update -d -f ./pieeprom-netboot.bin
+   sudo reboot
+
+   vcgencmd bootloader_config
+   vcgencmd bootloader_version
+   ```
 
 ### Cabling of a RPi module
 * Power - micro usb
