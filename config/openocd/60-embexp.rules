@@ -1,0 +1,11 @@
+# Derived from openocd rules.d file.
+
+ACTION!="add|change", GOTO="embexp_rules_end"
+SUBSYSTEM!="usb|tty|hidraw", GOTO="embexp_rules_end"
+
+# CP2102
+ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
+LABEL="embexp_rules_end"
+
+
