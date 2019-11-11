@@ -159,6 +159,7 @@ Run the following command: `{EMBEXP-BOX}/tools/box_server/compile_openocd.sh`.
 
 - udev - user access to devices
   1. `sudo cp {EMBEXP-BOX}/tools/openocd/contrib/60-openocd.rules /etc/udev/rules.d/`
+  1. `sudo cp {EMBEXP-BOX}/config/openocd/60-embexp.rules /etc/udev/rules.d/`
   1. `sudo reboot`
 
 - Refer to `MAINTENANCE.md` for how to create new users.
