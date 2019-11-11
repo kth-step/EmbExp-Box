@@ -51,8 +51,8 @@ try:
 
 		print("=" * 20)
 		# wait for network boot
-		# TODO: have the try comm check the output of the comm and timeout after 20s
-		if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 20):
+		# TODO: have the try comm check the output of the comm and timeout after 30s
+		if boxtest.tryComm(verbose, config.get_boxpath("."), interactive, board_id, board_type, 30):
 			print(SUCCESS + ": Comm")
 		else:
 			print(FAILED + ": Comm")
