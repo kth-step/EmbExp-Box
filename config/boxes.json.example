@@ -60,13 +60,14 @@
 				"pin_reset": 3,
 				"ethernet_mac": "b8:27:eb:ba:2f:58",
 				"ethernet_tftpboot": "08ba2f58"
-			}
-		}
-	},
-	"nobox": {
-		"active": true,
-		"boards": {
+			},
 			"lpc11c24_0": {
+				"active": true,
+				"type": "lpc11c24",
+				"jtag_cmsisdap_serialnumber": "12032018",
+				"serial_device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_F0AF-if00-port0"
+			},
+			"lpc11c24_1": {
 				"active": true,
 				"type": "lpc11c24",
 				"jtag_cmsisdap_serialnumber": "01005022",
