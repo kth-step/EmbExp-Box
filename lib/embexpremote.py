@@ -84,9 +84,11 @@ class EmbexpRemote:
 		# TODO: the following timeout is a fix for probably wrong ssh usage, should we use -f ? how to handle if the remote port is not available?
 		time.sleep(2)
 
-		rpi3waiting = self.board_type == "rpi3" or self.board_type == "rpi4"
-		if rpi3waiting:
-			print("waiting for rpi3 to boot up")
+		if self.board_type == "lpc11c24":
+			print(f"no need to wait for {self.board_type} to boot up")
+
+		elif self.board_type == "rpi2" or self.board_type == "rpi3" or self.board_type == "rpi4":
+			print(f"waiting for {self.board_type} to boot up")
 			sc = None
 			try:
 				connected = False
@@ -136,6 +138,9 @@ class EmbexpRemote:
 				if sc != None:
 					sc.close()
 				raise
+
+		else:
+			raise Exception(f"don't know board type {self.board_type}")
 
 		embexptools.launch_embexp_openocd(self.master, self.boxc.get_board_idx(), self.boxc.get_board_id(), lambda: self.on_error("openocd"))
 		
