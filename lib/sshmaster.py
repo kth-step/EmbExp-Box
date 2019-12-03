@@ -4,6 +4,7 @@ import threading
 import os
 import os.path
 import logging
+import getpass
 
 class SshMaster:
 	def __init__(self, instance_idx, ssh_host, ssh_port, port_map, term_handler):
@@ -18,7 +19,13 @@ class SshMaster:
 		self.proc = None
 
 		# ssh command and control socket handling
-		self.controlsocket = os.path.split(os.path.realpath(__file__))[0]+f"/../ssh/embexp-remote-inst_{self.instance_idx}.sock"
+		const_envnamecontroldir = "EMBEXP_CTRLSCKT_DIR"
+		if const_envnamecontroldir in os.environ:
+			ctrlsckt_dir = os.environ[const_envnamecontroldir]
+			self.controlsocket = f"{ctrlsckt_dir}/{getpass.getuser()}_{self.instance_idx}.sock"
+		else:
+			self.controlsocket = os.path.split(os.path.realpath(__file__))[0]+f"/../ssh/inst_{self.instance_idx}.sock"
+		self.controlsocket = os.path.abspath(self.controlsocket)
 		slavessh_cmd_list = ["-oControlPath=" + self.controlsocket]
 		masterssh_cmd_list = slavessh_cmd_list + ["-oControlMaster=yes"]
 
