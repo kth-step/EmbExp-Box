@@ -32,11 +32,13 @@ else:
 	logging.basicConfig(stream=sys.stderr, level=logging.WARNING)
 
 # get the last node in the node list
+nodes = []
 for node in networkconfig.NetworkConfig().get_node_tuples():
 	#print(node)
 	(node_name, node_port, node_username, node_networkmaster) = node
 	ssh_port = node_port
 	ssh_host = os.path.expandvars(f"{node_username}@{node_name}")
+	nodes.append((ssh_host, ssh_port, node_networkmaster))
 
 # argument variables
 board_type  = args.board_type
@@ -58,7 +60,7 @@ ENDC = '\033[0m'
 
 
 try:
-	with embexpremote.EmbexpRemote(instance_idx, ssh_host, ssh_port, board_type, box_name, board_name, do_query=args.query) as remote:
+	with embexpremote.EmbexpRemote(instance_idx, nodes, board_type, box_name, board_name, do_query=args.query) as remote:
 		remote.startup()
 
 		print(OKBLUE)
