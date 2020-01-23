@@ -79,6 +79,18 @@
 				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_01005022-if01"
 			}
 		}
+	},
+	"box3": {
+		"active": true,
+		"boards": {
+			"arty_a7_100t_0": {
+				"active": true,
+				"type": "arty_a7_100t",
+				"jtag_jtagkey_serialnumber": "T1RZQ4MO",
+				"serial_device": "/dev/serial/by-id/usb-Digilent_Digilent_USB_Device_210319A92BAC-if01-port0",
+				"fpga_arty_jtag_serialnumber": "210319A92BAC"
+			}
+		}
 	}
 }
 
