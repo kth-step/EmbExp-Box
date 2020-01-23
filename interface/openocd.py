@@ -28,14 +28,14 @@ target_cfg_dict = {"rpi2"     : config.get_boxpath("config/openocd/target/rpi2.c
                    "rpi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
                    "rpi4"     : config.get_boxpath("config/openocd/target/rpi4.cfg"), \
                    "lpc11c24" : "target/lpc11xx.cfg",                                 \
-                   "arty_a7_100t_0" : config.get_boxpath("config/openocd/target/arty-a7-100t_riscv_freedom_e31.cfg")}
+                   "arty_a7_100t" : config.get_boxpath("config/openocd/target/arty-a7-100t_riscv_freedom_e31.cfg")}
 # TODO: need parameters to allow different config file (in case of different fpga configuration)
 
-target_cfg_extra_dict = {"rpi2"     : [], \
-                         "rpi3"     : [], \
-                         "rpi4"     : [], \
-                         "lpc11c24" : ["-c", "adapter_khz 1000"], \
-                         "arty_a7_100t_0" : ["-c", "adapter_khz 500"]}
+interface_cfg_extra_dict = {"rpi2"     : [], \
+                            "rpi3"     : [], \
+                            "rpi4"     : [], \
+                            "lpc11c24" : ["-c", "adapter_khz 1000"], \
+                            "arty_a7_100t" : ["-c", "adapter_khz 500"]}
 
 # find jtag serial number
 try:
@@ -83,9 +83,9 @@ commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
 			 "-c", "gdb_port %d"    % (oocd_gdb_port_base), \
 			 "-c", "telnet_port %d" % (oocd_telnet_port)]
 target_cfg            = target_cfg_dict[board_type]
-target_cfg_extra      = target_cfg_extra_dict[board_type]
+interface_cfg_extra   = interface_cfg_extra_dict[board_type]
 
-cmd_list = ["../src/openocd", "-f", interface_cfg] + command_interface_sel + commands_ports + ["-f", target_cfg] + target_cfg_extra
+cmd_list = ["../src/openocd", "-f", interface_cfg] + interface_cfg_extra + command_interface_sel + commands_ports + ["-f", target_cfg]
 
 toolwrapper.SimpleWrapper(cmd_list, timeout=5)
 

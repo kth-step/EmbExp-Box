@@ -51,18 +51,37 @@ assert(os.path.isfile(firmware_file_path))
 
 if not to_flash:
 	jtag_prog_cmd = [config.get_boxpath("tools/xc3sprog/bin/xc3sprog"), "-c", "nexys4", "-s", fpga_jtag_serial, firmware_file_path]
-	# bin/xc3sprog -c "nexys4" -s "210319A92BAC" "E300ArtyDevKitFPGAChip.bit"
 	print(" ".join(jtag_prog_cmd))
 	print(20 * "=")
 
 	subprocess.call(jtag_prog_cmd)
 else:
-	assert(not to_flash)
+	# get the parameters (TODO: there are more)
+	fpga_ftdi_serial = "T1RZQ4MO"
+	fpga_openocd_cfg = config.get_boxpath("config/openocd/target/arty-a7-100t_riscv_freedom_e31.cfg")
 
-	print("program the FPGA (.bit file)")
-	print(" ".join([config.get_boxpath("interface/fpgaprog.py"), board_id[0], board_id[1], "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip"]))
-	print("use the softcore JTAG connection to program the flash memory (.mcs file)")
-	print("TODO")
-	print(firmware_file_path)
-	#cd ~/data/embexp/openocd/tcl
-	#../src/openocd -c "adapter_khz 2000" -f "interface/ftdi/jtagkey.cfg" -c "ftdi_serial T1RZQ4MO" -f "arty-a7-100t_riscv_freedom_e31.cfg" -c "flash protect 0 0 last off" -c "program /home/andreas/data/riscv/xc3sprog/E300ArtyDevKitFPGAChip.mcs verify 0x20000000" -c "exit"
+	# program the FPGA (.bit file)
+	cmd_1 = [config.get_boxpath("interface/fpgaprog.py"), board_id[0], board_id[1], "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip"]
+	print(" ".join(cmd_1))
+	print(20 * "=")
+	# TODO: execute cmd_1 here
+
+	print(20 * "=")
+	print("==== DONE")
+	print(20 * "=")
+
+
+	# use the softcore JTAG connection to program the flash memory (.mcs file)
+	print("cd tools/openocd/tcl")
+	cmd_2 = ["../src/openocd", "-c", "adapter_khz 2000", "-f", "interface/ftdi/jtagkey.cfg", "-c", f"ftdi_serial {fpga_ftdi_serial}", "-f", fpga_openocd_cfg, "-c", "flash protect 0 0 last off", "-c", f"program {firmware_file_path} verify 0x20000000", "-c", "exit"]
+	print(" ".join(cmd_2))
+	print(20 * "=")
+	print("note: it normally takes about 3 minutes to write and then 2 minutes to verify")
+	print(20 * "=")
+	# TODO: execute cmd_2 here
+
+	print(20 * "=")
+	print("==== DONE")
+	print(20 * "=")
+	print("TODO: test this, is not executed at the moment")
+

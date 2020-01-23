@@ -37,8 +37,8 @@ except:
 
 serdev = board_params["serial_device"]
 # TODO: have a better solution for baudrate selection
-serbaud = 9600 if board_params["type"] == "lpc11c24" else
-          57600 if board_params["type"] == "arty_a7_100t_0" else
+serbaud = 9600 if board_params["type"] == "lpc11c24" else \
+          57600 if board_params["type"] == "arty_a7_100t" else \
           115200
 print(f"serdev={serdev}")
 print(f"serbaud={serbaud}")
