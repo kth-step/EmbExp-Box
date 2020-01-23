@@ -13,8 +13,8 @@ cd ${BASE_DIR}
 git submodule init
 git submodule update
 cd tools/openocd
-git clean -fd
-git clean -fdX
+git clean -fdx
+
 ./bootstrap
 ./configure --enable-jlink --enable-ftdi --enable-stlink --enable-cmsis-dap --enable-openjtag
 make -j4

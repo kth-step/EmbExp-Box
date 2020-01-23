@@ -59,7 +59,7 @@ if not to_flash:
 else:
 	assert(not to_flash)
 
-	print("program the FPGA (.bit file)"
+	print("program the FPGA (.bit file)")
 	print(" ".join([config.get_boxpath("interface/fpgaprog.py"), board_id[0], board_id[1], "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip"]))
 	print("use the softcore JTAG connection to program the flash memory (.mcs file)")
 	print("TODO")

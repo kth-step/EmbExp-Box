@@ -4,3 +4,7 @@
 [submodule "tools/rpi-firmware"]
 	path = tools/firmware
 	url = https://github.com/kth-step/EmbExp-Box_firmware.git
+[submodule "tools/xc3sprog"]
+	path = tools/xc3sprog
+	url = https://github.com/kth-step/xc3sprog.git
+	branch = master
