@@ -1,10 +1,9 @@
 [submodule "tools/openocd"]
 	path = tools/openocd
 	url = https://github.com/kth-step/openocd.git
-[submodule "tools/rpi-firmware"]
+[submodule "tools/firmware"]
 	path = tools/firmware
 	url = https://github.com/kth-step/EmbExp-Box_firmware.git
 [submodule "tools/xc3sprog"]
 	path = tools/xc3sprog
 	url = https://github.com/kth-step/xc3sprog.git
-	branch = master
