@@ -20,9 +20,9 @@
 
 ## Prepare TFTP for RPi network boot
 1. Prepare some network boot options
-   - `cp -r {EMBEXP-BOX}/tools/rpi-firmware/boot_{thelatest} /tftpboot/raspbian_{thelatest}`
-   - `cp -r {EMBEXP-BOX}/tools/rpi-firmware/custom/rpi3_jtag_aarch64 /tftpboot/`
-   - `cp -r {EMBEXP-BOX}/tools/rpi-firmware/custom/rpi2_jtag /tftpboot/`
+   - `cp -r {EMBEXP-BOX}/tools/firmware/boot_{thelatest} /tftpboot/raspbian_{thelatest}`
+   - `cp -r {EMBEXP-BOX}/tools/firmware/custom/rpi3_jtag_aarch64 /tftpboot/`
+   - `cp -r {EMBEXP-BOX}/tools/firmware/custom/rpi2_jtag /tftpboot/`
 
 1. Link the boot options for the respective devices (see `boxes.json` file for the `TFTP` ids), for example:
    - `ln -s /tftpboot/rpi3_jtag_aarch64 /tftpboot/79ae849b`

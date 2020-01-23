@@ -38,10 +38,10 @@ JTAG (Mini module to RPi)
    * `CN2-12` to `13 (Gpio27/ARM_TMS)`
 
 ### Prepare SD card with latest firmware files (enables network boot on every RPi until "3+" and contains bugfixes)
-From `{EMBEXP-BOX}/tools/rpi-firmware/boot_{thelatest}`, take the file `bootcode.bin` and copy it on an empty FAT32 formatted SD card.
+From `{EMBEXP-BOX}/tools/firmware/boot_{thelatest}`, take the file `bootcode.bin` and copy it on an empty FAT32 formatted SD card.
 
 ### Flash EEPROM of RPi 4 and configure it to enable network boot
-TODO: add configured EEPROM image in tools/rpi-firmware/custom/rpi4_eeprom/...
+TODO: add configured EEPROM image in tools/firmware/custom/rpi4_eeprom/...
 TODO: clean up the following notes
 1. Standard EEPROM update
    ```

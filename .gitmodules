@@ -2,5 +2,5 @@
 	path = tools/openocd
 	url = https://github.com/kth-step/openocd.git
 [submodule "tools/rpi-firmware"]
-	path = tools/rpi-firmware
+	path = tools/firmware
 	url = https://github.com/kth-step/EmbExp-Box_firmware.git
