@@ -60,7 +60,12 @@
 				"pin_reset": 3,
 				"ethernet_mac": "b8:27:eb:ba:2f:58",
 				"ethernet_tftpboot": "08ba2f58"
-			},
+			}
+		}
+	},
+	"box2": {
+		"active": true,
+		"boards": {
 			"lpc11c24_0": {
 				"active": true,
 				"type": "lpc11c24",
