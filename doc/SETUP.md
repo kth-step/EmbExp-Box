@@ -25,6 +25,19 @@ Run the following commands.
   sudo apt install libhidapi-dev
   sudo apt install libftdi-dev
   ```
+- xc3sprog (FPGA programmer)
+  ```
+  sudo apt install subversion cmake libftdi1-dev
+  # TODO: refactor the following into a shell script that brings everything to the tools directory (is there a github repo for this?)
+  svn checkout https://svn.code.sf.net/p/xc3sprog/code/trunk xc3sprog-code
+  OUTDIR=$(pwd)/xc3sprog
+  mkdir "${OUTDIR}"
+  mkdir build
+  cd build
+  cmake -DCMAKE_INSTALL_PREFIX:PATH="${OUTDIR}" ../xc3sprog-code
+  make
+  make install
+  ```
 
 
 ## Compile OpenOCD

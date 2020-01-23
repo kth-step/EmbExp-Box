@@ -83,10 +83,26 @@ TODO: clean up the following notes
    ```
 
 ### Cabling of a RPi module
-* Power - micro usb
+* Power - micro USB
 * Reset - jumper cable gnd and rst, rst with resistor in series (3,9 k ohm)
-* UART/JTAG - mini usb
+* UART/JTAG - mini USB
 * Ethernet - patch cable
 
+## An Arty-A7 board
 
+### Writing the flash memory without Vivado
+This is not strictly needed at the moment, but it can be useful for later.
+```
+# program the FPGA (.bit file)
+interface/fpgaprog.py box3 arty_a7_100t_0 E300ArtyDevKitFPGAChip.bit
+# use the softcore JTAG connection to program the flash memory (.mcs file)
+# note: it takes about 3 minutes to write and then 2 minutes to verify
+cd ~/data/embexp/openocd/tcl
+../src/openocd -c "adapter_khz 2000" -f "interface/ftdi/jtagkey.cfg" -c "ftdi_serial T1RZQ4MO" -f "arty-a7-100t_riscv_freedom_e31.cfg" -c "flash protect 0 0 last off" -c "program /home/andreas/data/riscv/xc3sprog/E300ArtyDevKitFPGAChip.mcs verify 0x20000000" -c "exit"
+# ../src/openocd -c "adapter_khz 500" -f "interface/ftdi/jtagkey.cfg" -f "arty-a7-100t_riscv_freedom_e31.cfg"
+```
+
+### Cabling of an Arty-A7 board
+* Power/FPGA-JTAG/UART - micro USB
+* JTAG - mini USB (JTAG wiring, see `https://www.digikey.com/eewiki/display/LOGIC/Digilent+Arty+A7+with+Xilinx+Artix-7+Implementing+SiFive+FE310+RISC-V`)
 

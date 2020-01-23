@@ -6,6 +6,9 @@ SUBSYSTEM!="usb|tty|hidraw", GOTO="embexp_rules_end"
 # CP2102
 ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", MODE="660", GROUP="plugdev", TAG+="uaccess"
 
+# Digilent Arty-A7 JTAG interface
+ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
 LABEL="embexp_rules_end"
 
 
