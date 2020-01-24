@@ -27,7 +27,7 @@ Run the following commands.
   ```
 - xc3sprog (FPGA programmer)
   ```
-  sudo apt install subversion cmake libftdi1-dev
+  sudo apt install cmake libftdi1-dev
   ```
 
 
