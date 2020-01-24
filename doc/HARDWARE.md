@@ -38,10 +38,10 @@ JTAG (Mini module to RPi)
    * `CN2-12` to `13 (Gpio27/ARM_TMS)`
 
 ### Prepare SD card with latest firmware files (enables network boot on every RPi until "3+" and contains bugfixes)
-From `{EMBEXP-BOX}/tools/rpi-firmware/boot_{thelatest}`, take the file `bootcode.bin` and copy it on an empty FAT32 formatted SD card.
+From `{EMBEXP-BOX}/tools/firmware/boot_{thelatest}`, take the file `bootcode.bin` and copy it on an empty FAT32 formatted SD card.
 
 ### Flash EEPROM of RPi 4 and configure it to enable network boot
-TODO: add configured EEPROM image in tools/rpi-firmware/custom/rpi4_eeprom/...
+TODO: add configured EEPROM image in tools/firmware/custom/rpi4_eeprom/...
 TODO: clean up the following notes
 1. Standard EEPROM update
    ```
@@ -83,10 +83,21 @@ TODO: clean up the following notes
    ```
 
 ### Cabling of a RPi module
-* Power - micro usb
+* Power - micro USB
 * Reset - jumper cable gnd and rst, rst with resistor in series (3,9 k ohm)
-* UART/JTAG - mini usb
+* UART/JTAG - mini USB
 * Ethernet - patch cable
 
+## An Arty-A7 board
 
+### Writing the flash memory without Vivado
+This is not strictly needed at the moment, but it can be useful for later.
+```
+# note: it takes about 3 minutes to write and then 2 minutes to verify
+interface/fpgaprog.py box3 arty_a7_100t_0 arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip --to_flash
+```
+
+### Cabling of an Arty-A7 board
+* Power/FPGA-JTAG/UART - micro USB
+* JTAG - mini USB (JTAG wiring, see `https://www.digikey.com/eewiki/display/LOGIC/Digilent+Arty+A7+with+Xilinx+Artix-7+Implementing+SiFive+FE310+RISC-V`)
 

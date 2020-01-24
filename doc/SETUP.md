@@ -25,10 +25,18 @@ Run the following commands.
   sudo apt install libhidapi-dev
   sudo apt install libftdi-dev
   ```
+- xc3sprog (FPGA programmer)
+  ```
+  sudo apt install subversion cmake libftdi1-dev
+  ```
 
 
-## Compile OpenOCD
-Run the following command: `{EMBEXP-BOX}/tools/box_server/compile_openocd.sh`.
+## Compile OpenOCD and xc3sprog
+Run the following commands:
+```
+{EMBEXP-BOX}/tools/box_server/compile_openocd.sh
+{EMBEXP-BOX}/tools/box_server/compile_xc3sprog.sh
+```
 
 
 ## Setup network configuration

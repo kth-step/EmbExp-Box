@@ -5,6 +5,7 @@ import threading
 import time
 import logging
 import socket
+import traceback
 
 import boxclient
 import boxportdistrib
@@ -15,16 +16,57 @@ import embexptools
 
 class EmbexpRemote:
 
-	def __init__(self, instance_idx, ssh_host, ssh_port, board_type, box_name = None, board_name = None, do_query = False):
+	def __init__(self, instance_idx, nodes, board_type, box_name = None, board_name = None, do_query = False):
 		self.instance_idx = instance_idx
-		self.ssh_host = ssh_host
-		self.ssh_port = ssh_port
 		self.board_type = board_type
 		self.box_name = box_name
 		self.board_name = board_name
-		self.do_query = do_query
 
 		box_server_port_map = {boxportdistrib.get_port_box_server_client(self.instance_idx): boxportdistrib.get_port_box_server()}
+
+		print("trying to find a server where requested board_type is available")
+		found = False
+		for node in nodes:
+			(ssh_host, ssh_port, node_networkmaster) = node
+			print(f"trying {ssh_host} and {ssh_port}")
+			try:
+				master_tmp = sshmaster.SshMaster(self.instance_idx, ssh_host, ssh_port, \
+							box_server_port_map, lambda: (_ for _ in ()).throw(Exception("error during server probing phase")))
+				try:
+					master_tmp.start()
+					box_server_port_client = boxportdistrib.get_port_box_server_client(self.instance_idx)
+					boxc_tmp = boxclient.BoxClient("localhost", box_server_port_client, self.board_type)
+					server_query = boxc_tmp.query_server()
+
+					if do_query:
+						print(f"claimed boards at the server")
+						print("="*40)
+						for b in server_query["claimed"]:
+							print(b)
+						print()
+						print("available boards at the server")
+						print("="*40)
+						for b in server_query["unclaimed"]:
+							print(b)
+						print()
+
+					if not any(x["type"] == self.board_type for x in server_query["unclaimed"]):
+						continue
+				finally:
+					master_tmp.stop()
+			except:
+				track = traceback.format_exc()
+				print(track)
+				print(20 * "=")
+				continue
+			self.ssh_host = ssh_host
+			self.ssh_port = ssh_port
+			print(f"choosing: {self.ssh_host} and {self.ssh_port}")
+			found = True
+
+		if not found:
+			raise Exception("couldn't find a free board")
+
 		self.master = sshmaster.SshMaster(self.instance_idx, self.ssh_host, self.ssh_port, \
 					box_server_port_map, lambda: self.on_error("master"))
 
@@ -42,20 +84,6 @@ class EmbexpRemote:
 		self.master.start()
 		try:
 			box_server_port_client = boxportdistrib.get_port_box_server_client(self.instance_idx)
-
-			if self.do_query:
-				boxc_tmp = boxclient.BoxClient("localhost", box_server_port_client, self.board_type)
-				server_query = boxc_tmp.query_server()
-				print("claimed boxes at the server")
-				print("="*40)
-				for b in server_query["claimed"]:
-					print(b)
-				print()
-				print("available boxes at the server")
-				print("="*40)
-				for b in server_query["unclaimed"]:
-					print(b)
-				print()
 
 			print("requesting board from server now")
 			self.boxc = boxclient.BoxClient("localhost", box_server_port_client \
@@ -86,6 +114,11 @@ class EmbexpRemote:
 
 		if self.board_type == "lpc11c24":
 			print(f"no need to wait for {self.board_type} to boot up")
+
+		elif self.board_type == "arty_a7_100t":
+			# TODO: generalize to use board_options (introduce a board_options string as parameter for script and variables before)
+			print(f"programming FPGA with bitstream (freedom-e300) - {self.board_type}")
+			embexptools.execute_embexp_programfpga(self.master, self.boxc.get_board_id(), "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip")
 
 		elif self.board_type == "rpi2" or self.board_type == "rpi3" or self.board_type == "rpi4":
 			print(f"waiting for {self.board_type} to boot up")

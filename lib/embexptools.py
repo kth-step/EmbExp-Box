@@ -52,5 +52,9 @@ def launch_embexp_openocd(master, board_idx, board_id, term_handler):
 	sys.stdout.flush()
 	logging.info("Redirection           = %s" % (str(redir_dict)))
 
-
+def execute_embexp_programfpga(master, board_id, bitstream_file):
+	ssh_cmd_list = ["/opt/embexp-box/interface/fpgaprog.py"] + board_id + [bitstream_file]
+	slave_fpgaprog = sshslave.SshSlave("fpgaprog", master, ssh_cmd_list, lambda: None)
+	slave_fpgaprog.start()
+	slave_fpgaprog.wait(10)
 
