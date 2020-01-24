@@ -115,6 +115,11 @@ class EmbexpRemote:
 		if self.board_type == "lpc11c24":
 			print(f"no need to wait for {self.board_type} to boot up")
 
+		elif self.board_type == "arty_a7_100t":
+			# TODO: generalize to use board_options (introduce a board_options string as parameter for script and variables before)
+			print(f"programming FPGA with bitstream (freedom-e300) - {self.board_type}")
+			embexptools.execute_embexp_programfpga(self.master, self.boxc.get_board_id(), "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip")
+
 		elif self.board_type == "rpi2" or self.board_type == "rpi3" or self.board_type == "rpi4":
 			print(f"waiting for {self.board_type} to boot up")
 			sc = None

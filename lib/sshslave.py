@@ -69,6 +69,10 @@ class SshSlave:
 		if self.term_thread.is_alive():
 			raise SshSlaveNotEndedException(self.get_name())
 
+	def wait(self, timeout = None):
+		assert self.proc != None
+		self.proc.wait(timeout=timeout)
+
 	def run_term_check(self):
 		# wait until process ends
 		self.proc.wait()
