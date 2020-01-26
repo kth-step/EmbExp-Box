@@ -88,7 +88,13 @@ TODO: clean up the following notes
 * UART/JTAG - mini USB
 * Ethernet - patch cable
 
+
+## An LPC11C24 board (LPCXpresso with CMSIS DAP)
+The board does not connect to the serial port of the processor by default. One has to either connect it with an external module or connect it using small resistors on the board. For the latter option, see the pictures in [`pictures/lpc11c24`](pictures/lpc11c24).
+
+
 ## An Arty-A7 board
+![Arty-A7 board](pictures/arty_a7/arty_a7.jpg)
 
 ### Writing the flash memory without Vivado
 This is not strictly needed at the moment, but it can be useful for later.
