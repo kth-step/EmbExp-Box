@@ -16,11 +16,12 @@ import embexptools
 
 class EmbexpRemote:
 
-	def __init__(self, instance_idx, nodes, board_type, box_name = None, board_name = None, do_query = False):
+	def __init__(self, instance_idx, nodes, board_type, board_option = None, box_name = None, board_name = None, do_query = False):
 		self.instance_idx = instance_idx
-		self.board_type = board_type
-		self.box_name = box_name
-		self.board_name = board_name
+		self.board_type   = board_type
+		self.board_option = board_option
+		self.box_name     = box_name
+		self.board_name   = board_name
 
 		box_server_port_map = {boxportdistrib.get_port_box_server_client(self.instance_idx): boxportdistrib.get_port_box_server()}
 
@@ -116,6 +117,7 @@ class EmbexpRemote:
 			print(f"no need to wait for {self.board_type} to boot up")
 
 		elif self.board_type == "arty_a7_100t":
+			assert self.board_option == "fe310"
 			# TODO: generalize to use board_options (introduce a board_options string as parameter for script and variables before)
 			print(f"programming FPGA with bitstream (freedom-e300) - {self.board_type}")
 			embexptools.execute_embexp_programfpga(self.master, self.boxc.get_board_id(), "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip")
