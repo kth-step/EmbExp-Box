@@ -4,7 +4,7 @@ The remote connection just requires a single SSH connection to work, which obvia
 On the server side, all hardware boards can be contained in a number of boxes that are attached to a server, which together just sit in a remote lab room or simply someone's office.
 
 This infrastructure can be easily integrated to conduct bare-metal software experiments, as well as a component of a continuous integration pipeline or similar tasks.
-The companion repository [`EmbExp-ProgPlatform`](https://github.com/kth-step/EmbExp-ProgPlatform) is making use of the `EmbExp-Box` infrastructure to provide a rudimentary bare-metal execution environment for low-level hardware experiments.
+The companion repository [`EmbExp-ProgPlatform`](https://github.com/kth-step/EmbExp-ProgPlatform) provides a rudimentary bare-metal execution environment and makes use of the `EmbExp-Box` infrastructure to conduct low-level hardware experiments.
 
 
 ## Supported targets
