@@ -10,9 +10,14 @@ BASE_DIR=$(readlink -f "${THIS_DIR}/../..")
 cd ${BASE_DIR}
 
 # get and compile openocd
-git submodule init
-git submodule update
-cd tools/openocd
+cd tools
+rm -rf openocd_sf
+
+git clone https://git.code.sf.net/p/openocd/code openocd_sf
+cd openocd_sf
+
+git clean -fdx .
+git checkout v0.11.0
 git clean -fdx .
 
 ./bootstrap
