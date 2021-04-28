@@ -129,22 +129,27 @@ class BoxServer:
 			# claimed and initialize, inform the client
 			messaging.send_message(sc, [self.config.get_board(board_id)['index'],board_id,"ok"])
 
-			commands = []
+			logging.info(f"Creating command handlers for board {board_id}")
+			commands = {}
 			if 'pin_reset' in self.config.get_board(board_id).keys():
-				commands = ["stop", "start"]
+				commands["stop"]  = lambda board_id=board_id: self.set_board_reset(board_id, True)
+				commands["start"] = lambda board_id=board_id: self.set_board_reset(board_id, False)
+
+			if "client_cmds" in self.config.get_board(board_id).keys():
+				client_cmds = self.config.get_board(board_id)["client_cmds"]
+				for client_cmd in client_cmds.keys():
+					commands[client_cmd] = lambda board_id=board_id, client_cmd=client_cmd: self.exec_client_cmd(board_id, client_cmd)
 
 			while True:
 				# 4. send available commands
-				messaging.send_message(sc, commands)
+				messaging.send_message(sc, list(commands.keys()))
 
 				# 5. receive selected command and act
 				command = messaging.recv_message(sc)
-				if not command in commands:
+				if not command in commands.keys():
 					raise Exception("input error, requested command is not available")
-				if command == "stop":
-					self.set_board_reset(board_id, True)
-				if command == "start":
-					self.set_board_reset(board_id, False)
+				else:
+					commands[command]()
 		except messaging.SocketDiedException:
 			pass
 		except ConnectionResetError:
@@ -212,6 +217,10 @@ class BoxServer:
 			logging.info(f"running {board_id}")
 		self.box_controllers[box_id].set_board_reset(board_name, reset)
 
+	def exec_client_cmd(self, board_id, cmd_name):
+		(box_id,board_name) = board_id
+		logging.info(f"executing board_cmd {cmd_name} on {board_id}")
+		self.box_controllers[box_id].exec_board_cmd(board_name, cmd_name)
 
 	def init_board(self, board_id):
 		# initialize to reset

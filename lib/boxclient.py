@@ -18,7 +18,6 @@ class BoxClient:
 		self.board_type = board_type
 		self.box_name = box_name
 		self.board_name = board_name
-		self.resettable = True
 
 		self.sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
@@ -81,6 +80,8 @@ class BoxClient:
 			(self.board_idx, self.board_id, msg) = messaging.recv_message(self.sc)
 			if self.board_idx < 0:
 				raise BoxServerNoBoardException(msg)
+
+			self.board_commands = messaging.recv_message(self.sc)
 		except:
 			self.sc.close()
 			raise
@@ -94,19 +95,20 @@ class BoxClient:
 	def get_board_id(self):
 		return self.board_id
 
-	def _send_command(self, command):
-		# TODO: fix this to work correctly
-		if not self.resettable:
+	def get_commands(self):
+		return self.board_commands
+
+	def send_command(self, command):
+		if not command in self.board_commands:
+			msg = f"{command} not in {self.board_commands}"
+			print(msg)
+			#raise Exception(msg)
 			return
-		commands = messaging.recv_message(self.sc)
-		if not command in commands:
-			self.resettable = False
-			return
-			#raise Exception(f"{command} not in {commands}")
 		messaging.send_message(self.sc, command)
+		self.board_commands = messaging.recv_message(self.sc)
 
 	def board_start(self):
-		self._send_command("start")
+		self.send_command("start")
 
 	def board_stop(self):
-		self._send_command("stop")
+		self.send_command("stop")

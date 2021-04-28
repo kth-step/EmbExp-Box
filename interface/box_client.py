@@ -15,7 +15,8 @@ boxc = boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), No
 print("boxes of the server")
 print("="*40)
 server_query = boxc.query_server()
-print(server_query["claimed"])
+print(f"claimed: {server_query['claimed']}")
+print(f"unclaimed: {server_query['unclaimed']}")
 print()
 
 board_type = input("board_type: ")
@@ -38,13 +39,13 @@ with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), boar
 	print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
 
 	while True:
+		print(f"available commands: {boxc.get_commands()}")
+
 		command = input("command: ")
 		if command == "":
 			break
-		elif command == "start":
-			boxc.board_start()
-		elif command == "stop":
-			boxc.board_stop()
+		elif command in boxc.get_commands():
+			boxc.send_command(command)
 		else:
-			print("unknown command")
+			print("unavailable command")
 
