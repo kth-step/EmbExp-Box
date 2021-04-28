@@ -10,9 +10,11 @@ The companion repository [`EmbExp-ProgPlatform`](https://github.com/kth-step/Emb
 ## Supported targets
 - ARM Cortex-A7 - ARMv7-A (Raspberry Pi 2B)
 - ARM Cortex-A53 - ARMv8-A (Raspberry Pi 3B)
+- ARM Cortex-A53 - ARMv8-A (HiKey 620, only basic integration)
 - ARM Cortex-A72 - ARMv8-A (Raspberry Pi 4B)
 - ARM Cortex-M0 - ARMv6-M (LPCXpresso LPC11C24)
-- SiFive Freedom E300 - RV32IMAC (Arty A7-100T)
+- SiFive Freedom E300 - RV32IMAC (Arty A7-100T FPGA)
+- CVA6/Ariane - RV64GC (Genesys 2 Kintex-7 FPGA)
 
 
 ## Getting started
