@@ -19,6 +19,9 @@ class BoxClient:
 		self.box_name = box_name
 		self.board_name = board_name
 
+		self.board_id = None
+		self.board_commands = None
+
 		self.sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 	def _request_to_server(sc, request_type):

@@ -89,6 +89,7 @@ class EmbexpRemote:
 			print("requesting board from server now")
 			self.boxc = boxclient.BoxClient("localhost", box_server_port_client \
 					, self.board_type, box_name=self.box_name, board_name=self.board_name)
+
 			self.boxc.start()
 			print(f"Board ID = {' '.join(self.boxc.board_id)}")
 		except:
@@ -106,6 +107,10 @@ class EmbexpRemote:
 		os._exit(-1)
 
 	def startup(self):
+		if self.board_type == "genesys2":
+			self.boxc.send_command("powerup_fpga_qspi")
+			time.sleep(2)
+
 		embexptools.launch_embexp_comm(self.master, self.boxc.get_board_idx(), self.boxc.get_board_id(), lambda: self.on_error("comm"))
 		local_commport = boxportdistrib.get_ports_box_server_board_client(self.master.instance_idx)[0]
 		boot_timeout = 20
@@ -115,6 +120,18 @@ class EmbexpRemote:
 
 		if self.board_type == "lpc11c24":
 			print(f"no need to wait for {self.board_type} to boot up")
+
+		elif self.board_type == "hikey620":
+			self.boxc.send_command("powerup")
+			print(f"wait for 2 seconds {self.board_type} to boot up")
+			time.sleep(2)
+
+		elif self.board_type == "genesys2":
+			print(f"wait for 10 seconds for {self.board_type} to boot up")
+			for i in range(10):
+				print(".", end="", flush=True)
+				time.sleep(1)
+			print()
 
 		elif self.board_type == "arty_a7_100t":
 			assert self.board_option == "fe310"
