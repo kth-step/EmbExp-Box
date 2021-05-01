@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("box_name", help="name of the box to connect to")
 parser.add_argument("board_name", help="name of the board to connect to")
 parser.add_argument("-i", "--interactive", help="interactive comm session, otherwise hosted as tcp port", action="store_true")
-parser.add_argument("-it", "--interactiveType", help="if interactive, what type (\"output\" means output only)")
+parser.add_argument("-it", "--interactiveType", choices=["output", "screen"], help="if interactive, what type (\"output\" means output only)")
 args = parser.parse_args()
 
 # argument variables
@@ -64,9 +64,12 @@ if interactive:
 		cmdLine = [cmd, serdev, str(serbaud)]
 
 		toolwrapper.SimpleWrapper(cmdLine, timeout=5)
-	else:
+	elif interactive_mode == "screen":
 		# alternative 2: screen
 		subprocess.call(" ".join(["screen", serdev, str(serbaud)]), shell=True)
+	else:
+		print("unknown interactive type")
+		exit(-1)
 	exit(0)
 
 

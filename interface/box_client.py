@@ -11,12 +11,21 @@ import messaging
 import boxportdistrib
 import boxclient
 
+def print_list(l):
+	for i in l:
+		print(i)
+
 boxc = boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), None)
 print("boxes of the server")
 print("="*40)
 server_query = boxc.query_server()
-print(f"claimed: {server_query['claimed']}")
-print(f"unclaimed: {server_query['unclaimed']}")
+print("claimed:")
+print_list(server_query['claimed'])
+print()
+print("unclaimed:")
+print_list(server_query['unclaimed'])
+print()
+print()
 print()
 
 board_type = input("board_type: ")
