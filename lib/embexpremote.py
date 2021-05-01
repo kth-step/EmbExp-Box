@@ -173,6 +173,7 @@ class EmbexpRemote:
 					line = ""
 					while not line.endswith('\n'):
 						line = line + sc.recv(1).decode('ascii')
+					logging.debug(line)
 					#print(line)
 					print(".", end='')
 					sys.stdout.flush()
