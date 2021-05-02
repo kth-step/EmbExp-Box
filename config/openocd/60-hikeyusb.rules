@@ -1,0 +1,14 @@
+# Derived from openocd rules.d file.
+
+ACTION!="add|change", GOTO="hikeyusb_rules_end"
+SUBSYSTEM!="usb|tty|hidraw", GOTO="hikeyusb_rules_end"
+
+# HIKEY USB BOOTLOADER
+ATTRS{idVendor}=="12d1", ATTRS{idProduct}=="3609", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
+# Digilent Arty-A7 JTAG interface
+#ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", MODE="660", GROUP="plugdev", TAG+="uaccess"
+
+LABEL="hikeyusb_rules_end"
+
+
