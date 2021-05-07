@@ -172,7 +172,13 @@ class EmbexpRemote:
 				while True:
 					line = ""
 					while not line.endswith('\n'):
-						line = line + sc.recv(1).decode('ascii')
+						new_b = sc.recv(1)
+						try:
+							new_s = new_b.decode('ascii')
+						except:
+							logging.debug(f"cannot decode byte: {new_b}. line so far: '{line}'")
+							raise
+						line = line + new_s
 					logging.debug(line)
 					#print(line)
 					print(".", end='')
