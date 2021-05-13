@@ -6,6 +6,8 @@ import time
 import os
 import logging
 
+from datetime import datetime
+
 import messaging
 import boxgpio
 
@@ -28,6 +30,12 @@ class BoxServer:
 		# the last box power off timer
 		self.poweroff_timer_boxes = set()
 		self.poweroff_timer = None
+
+
+	def _log_info_with_time(string):
+		now = datetime.now()
+		datetimestr = now.strftime("%Y-%m-%d %H:%M:%S")
+		logging.info(f"{datetimestr} - {string}")
 
 
 	def start(self, port):
@@ -56,7 +64,7 @@ class BoxServer:
 				# 0a. send available request types
 				request_types = list(self.request_handlers.keys())
 				messaging.send_message(sc, request_types)
-				
+
 				# 0b. receive request type
 				request = messaging.recv_message(sc)
 				if not isinstance(request, list) and len(request) != 2:
@@ -229,6 +237,7 @@ class BoxServer:
 
 
 	def claim_board(self, user_id, board_ids, idx=-1):
+		BoxServer._log_info_with_time(f"user {user_id} tries to claim one board of {board_ids} ({idx})")
 		# have to determine which ones are not in use, turn on the box maybe
 		with self.lock:
 			# first select a board
@@ -254,7 +263,7 @@ class BoxServer:
 				self.claimed_boards.remove(board_id)
 				raise
 
-		logging.info(f"claimed {board_id}")
+		BoxServer._log_info_with_time(f"user {user_id} claimed {board_id}")
 		return board_id
 
 
@@ -276,6 +285,6 @@ class BoxServer:
 			# have to turn off the box (if not needed) within the lock
 			self.set_box_power(box_id)
 
-		logging.info(f"yielded {board_id}")
+		BoxServer._log_info_with_time(f"yielded {board_id}")
 
 
