@@ -103,7 +103,7 @@ commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
 target_cfg            = target_cfg_dict[board_type]
 interface_cfg_extra   = interface_cfg_extra_dict[board_type]
 
-cmd_list = ["../src/openocd"] + command_interface_sel + interface_cfg_extra + commands_ports + ["-f", target_cfg]
+cmd_list = ["../src/openocd"] + command_interface_sel + (interface_cfg_extra if False else []) + commands_ports + ["-f", target_cfg] + interface_cfg_extra
 
 toolwrapper.SimpleWrapper(cmd_list, timeout=5)
 
