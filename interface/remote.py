@@ -20,6 +20,7 @@ parser.add_argument("-idx", "--instance_idx", help="instance index", type=int)
 parser.add_argument("-q", "--query", help="query the server first, and print out the result", action="store_true")
 
 parser.add_argument("--board_option", help="option for how to use board type")
+parser.add_argument("--node_name", help="name of the node/server to connect to")
 parser.add_argument("--box_name", help="name of the box to connect to")
 parser.add_argument("--board_name", help="name of the board to connect to")
 
@@ -39,7 +40,7 @@ for node in networkconfig.NetworkConfig().get_node_tuples():
 	(node_name, node_port, node_username, node_networkmaster) = node
 	ssh_port = node_port
 	ssh_host = os.path.expandvars(f"{node_username}@{node_name}")
-	nodes.append((ssh_host, ssh_port, node_networkmaster))
+	nodes.append((node_name, ssh_host, ssh_port, node_networkmaster))
 
 # argument variables
 if "__" in args.board_type:
@@ -52,6 +53,7 @@ else:
 	board_type    = args.board_type
 	board_option  = args.board_option
 instance_idx  = 0 if args.instance_idx == None else args.instance_idx
+node_name     = args.node_name
 box_name      = args.box_name
 board_name    = args.board_name
 
@@ -71,7 +73,7 @@ ENDC = '\033[0m'
 
 
 try:
-	with embexpremote.EmbexpRemote(instance_idx, nodes, board_type, board_option, box_name, board_name, do_query=args.query) as remote:
+	with embexpremote.EmbexpRemote(instance_idx, nodes, board_type, board_option, node_name, box_name, board_name, do_query=args.query) as remote:
 		remote.startup()
 
 		print(OKBLUE)

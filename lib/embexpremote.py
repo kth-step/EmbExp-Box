@@ -16,10 +16,11 @@ import embexptools
 
 class EmbexpRemote:
 
-	def __init__(self, instance_idx, nodes, board_type, board_option = None, box_name = None, board_name = None, do_query = False):
+	def __init__(self, instance_idx, nodes, board_type, board_option = None, node_name = None, box_name = None, board_name = None, do_query = False):
 		self.instance_idx = instance_idx
 		self.board_type   = board_type
 		self.board_option = board_option
+		self.node_name    = node_name
 		self.box_name     = box_name
 		self.board_name   = board_name
 
@@ -28,7 +29,10 @@ class EmbexpRemote:
 		print("trying to find a server where requested board_type is available")
 		found = False
 		for node in nodes:
-			(ssh_host, ssh_port, node_networkmaster) = node
+			(node_name, ssh_host, ssh_port, node_networkmaster) = node
+			if (self.node_name != None) and (self.node_name != node_name):
+				continue
+
 			print(f"trying {ssh_host} and {ssh_port}")
 			try:
 				master_tmp = sshmaster.SshMaster(self.instance_idx, ssh_host, ssh_port, \
@@ -40,12 +44,12 @@ class EmbexpRemote:
 					server_query = boxc_tmp.query_server()
 
 					if do_query:
-						print(f"claimed boards at the server")
+						print(f"claimed boards at the node/server {node_name}")
 						print("="*40)
 						for b in server_query["claimed"]:
 							print(b)
 						print()
-						print("available boards at the server")
+						print(f"available boards at the node/server {node_name}")
 						print("="*40)
 						for b in server_query["unclaimed"]:
 							print(b)
