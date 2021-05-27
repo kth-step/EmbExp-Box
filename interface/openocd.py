@@ -41,6 +41,7 @@ interface_cfg_extra_dict = {"rpi2"     : [], \
                             "genesys2" : [], \
                             "hikey620" : ["-c", "adapter speed 500", "-c", "transport select jtag"]}
 
+
 # find jtag serial number
 try:
 	board_params = config.get_board(board_id)
@@ -82,6 +83,10 @@ else:
 	assert False
 
 
+interface_cfg_extra_prepend = \
+  True if board_params["type"] == "arty_a7_100t" else \
+  False
+
 board_idx = config.get_board(board_id)['index']
 if board_idx < 0 or 99 < board_idx:
 	raise Exception("board index is not usable (out of range)")
@@ -103,7 +108,12 @@ commands_ports        = ["-c", "tcl_port %d"    % (oocd_tcl_port), \
 target_cfg            = target_cfg_dict[board_type]
 interface_cfg_extra   = interface_cfg_extra_dict[board_type]
 
-cmd_list = ["../src/openocd"] + command_interface_sel + (interface_cfg_extra if False else []) + commands_ports + ["-f", target_cfg] + interface_cfg_extra
+cmd_list = ["../src/openocd"] + \
+           command_interface_sel + \
+           (interface_cfg_extra if interface_cfg_extra_prepend else []) + \
+           commands_ports + \
+           ["-f", target_cfg] + \
+           ([] if interface_cfg_extra_prepend else interface_cfg_extra)
 
 toolwrapper.SimpleWrapper(cmd_list, timeout=5)
 
