@@ -1,5 +1,5 @@
 # EmbExp-Box - embedded experiments in a box
-This repository contains an infrastructure for a group of users to remotely or locally develop, debug and run low-level software in a unified manner.
+This repository contains an infrastructure to enable a group of users to remotely or locally develop, debug and run low-level software in a unified manner.
 The remote connection just requires a single SSH connection to work, which obviates the need for messy cabling and trivial reoccuring problems when messing with hardware setups.
 On the server side, all hardware boards can be contained in a number of boxes that are attached to a server, which together just sit in a remote lab room or simply someone's office.
 
