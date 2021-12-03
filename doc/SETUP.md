@@ -10,6 +10,7 @@ Run the following commands.
   sudo apt install screen
   sudo apt install dnsutils ethtool
   sudo apt install rsync
+  sudo apt install vbetool
   ```
 - python (install for all, is something like this needed? `umask 022`)
   ```
@@ -142,9 +143,12 @@ Run the following commands:
   #!/bin/sh -e
   
   # select experiment network interface
-  export EXPERIMENT_IF=enx00e04c680037
+  #export EXPERIMENT_IF=enx00e04c680037
   # line for the startup stript
   /opt/embexp-box/tools/startup/startup.sh
+
+  # line for turning off the monitor (might be needed for open-standing laptops)
+  #vbetool dpms off
   
   exit 0
   ```

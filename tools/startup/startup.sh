@@ -8,7 +8,7 @@ BASE_DIR=$(readlink -f "${THIS_DIR}/../..")
 LOG_DIR=${BASE_DIR}/logs
 
 # setup firewall (iptables)
-${BASE_DIR}/tools/startup/firewall.sh
+#${BASE_DIR}/tools/startup/firewall.sh
 
 # start the box_server and fork it off
 datetime=$(date "+%Y-%m-%d_%H-%M-%S")
