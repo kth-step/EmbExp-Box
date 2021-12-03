@@ -2,23 +2,11 @@
 	"box1": {
 		"active": true,
 		"pin_controller": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:3.1.4:1.0-port0",
-		"pin_controller_old3": "/dev/serial/by-path/pci-0000:00:12.0-usb-0:2:1.0-port0",
-		"pin_controller_old2": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:3.2:1.0-port0",
-		"pin_controller_old": "/dev/serial/by-id/usb-1a86_USB2.0-Serial-if00-port0",
 		"pin_power": 2,
 		"pin_fan": 13,
 		"time_powerup_wait": 2,
 		"time_poweroff_delay": 300,
 		"boards": {
-			"rpi4_0": {
-				"active": false,
-				"type": "rpi4",
-				"jtag_minimodule_serialnumber": "FT1OSM9B",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSM9B-if01-port0",
-				"pin_reset": 8,
-				"ethernet_mac": "dc:a6:32:15:e1:0d",
-				"ethernet_tftpboot": "02e1b72a"
-			},
 			"rpi3_0": {
 				"active": true,
 				"type": "rpi3",
@@ -46,15 +34,6 @@
 				"ethernet_mac": "b8:27:eb:64:8f:61",
 				"ethernet_tftpboot": "7c648f61"
 			},
-			"rpi3_3": {
-				"active": false,
-				"type": "rpi3",
-				"jtag_minimodule_serialnumber": "FT1OSIJR",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSIJR-if01-port0",
-				"pin_reset": 7,
-				"ethernet_mac": "b8:27:eb:c4:ba:86",
-				"ethernet_tftpboot": "83c4ba86"
-			},
 			"rpi2_0": {
 				"active": true,
 				"type": "rpi2",
@@ -69,69 +48,6 @@
 				"type": "lpc11c24",
 				"jtag_cmsisdap_serialnumber": "12032018",
 				"serial_device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_F0AF-if00-port0"
-			}
-		}
-	},
-	"box2": {
-		"active": false,
-		"pin_controller": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:2.3.1:1.0-port0",
-		"pin_controller_old1": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:2.2.2:1.0-port0",
-		"pin_controller_old2": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:2.1:1.0-port0",
-		"boards": {
-			"hikey620_0": {
-				"active": true,
-				"type": "hikey620",
-				"jtag_jlink_serialnumber": "304439649",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_TTL232RG-VREG1V8_FTXOEER6-if00-port0",
-				"client_cmds": {
-					"poweroff":       ["pin 2 true", "sleep 1.0"],
-					"powerup_rom_bl": ["pin 2 true", "sleep 1.0", "pin 3 false", "pin 2 false"],
-					"powerup":        ["pin 2 true", "sleep 1.0", "pin 3 true",  "pin 2 false"]
-				}
-			}
-		}
-	},
-	"box3_0": {
-		"active": false,
-		"pin_controller": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_7cd8-if00-port0",
-		"boards": {
-			"genesys2_0": {
-				"active": true,
-				"type": "genesys2",
-				"jtag_genesys2_serialnumber": "200300730577",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A503PYM5-if00-port0",
-				"client_cmds": {
-					"poweroff":          ["pin 4 true", "sleep 1.0"],
-					"powerup_fpga_jtag": ["pin 4 true", "sleep 1.0", "pin 7 true",  "pin 10 true", "pin 11 true", "sleep 0.5", "pin 4 false"],
-					"powerup_fpga_qspi": ["pin 4 true", "sleep 1.0", "pin 7 false", "pin 10 true", "pin 11 true", "sleep 0.5", "pin 4 false"],
-                                        "reset_fpga":        ["pin 11 false", "sleep 0.5", "pin 11 true"],
-                                        "reset_softcore":    ["pin 10 false", "sleep 0.5", "pin 10 true"]
-				}
-			},
-			"arty_a7_100t_0": {
-				"active": true,
-				"type": "arty_a7_100t",
-				"jtag_jtagkey_serialnumber": "T1RZQ4MO",
-				"serial_device": "/dev/serial/by-id/usb-Digilent_Digilent_USB_Device_210319A92BAC-if01-port0",
-				"fpga_arty_jtag_serialnumber": "210319A92BAC",
-				"client_cmds": {
-					"poweroff":          ["pin 3 true", "sleep 1.0"],
-					"powerup_fpga_jtag": ["pin 3 true", "sleep 1.0", "pin 6 true",  "pin 13 true", "pin 14 true", "sleep 0.5", "pin 3 false"],
-					"powerup_fpga_qspi": ["pin 3 true", "sleep 1.0", "pin 6 false", "pin 13 true", "pin 14 true", "sleep 0.5", "pin 3 false"],
-					"reset_fpga":        ["pin 14 false", "sleep 0.5", "pin 14 true"],
-					"reset_softcore":    ["pin 13 false", "sleep 0.5", "pin 13 true"]
-				}
-                        }
-		}
-	},
-	"box3_1": {
-		"active": false,
-		"boards": {
-			"lpc11c24_1": {
-				"active": true,
-				"type": "lpc11c24",
-				"jtag_cmsisdap_serialnumber": "0100E01A",
-				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_0100E01A-if01"
 			}
 		}
 	}
