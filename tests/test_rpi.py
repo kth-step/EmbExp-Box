@@ -43,7 +43,7 @@ failed = False
 
 assert board_type == "rpi2" or board_type == "rpi3" or board_type == "rpi4"
 try:
-	with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type) as boxc:
+	with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type, user_id = "just_a_test") as boxc:
 		print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
 		board_id = boxc.board_id
 

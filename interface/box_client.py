@@ -15,7 +15,12 @@ def print_list(l):
 	for i in l:
 		print(i)
 
-boxc = boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), None)
+
+user_id_localpart = getpass.getuser()
+user_id_remotepart = "local_boxclient"
+user_id = f"{user_id_localpart}__{user_id_remotepart}"
+
+boxc = boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), None, user_id = user_id)
 print("boxes of the server")
 print("="*40)
 server_query = boxc.query_server()
@@ -44,7 +49,7 @@ else:
 	box_name   = board_id_lst[0]
 	board_name = board_id_lst[1]
 
-with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type, box_name, board_name) as boxc:
+with boxclient.BoxClient("localhost", boxportdistrib.get_port_box_server(), board_type, box_name, board_name, user_id = user_id) as boxc:
 	print(f"connected to board: {(boxc.board_idx, boxc.board_id)}")
 
 	while True:

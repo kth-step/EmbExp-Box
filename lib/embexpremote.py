@@ -6,6 +6,7 @@ import time
 import logging
 import socket
 import traceback
+import getpass
 
 import boxclient
 import boxportdistrib
@@ -24,6 +25,8 @@ class EmbexpRemote:
 		self.box_name     = box_name
 		self.board_name   = board_name
 
+		self.user_id_localpart = getpass.getuser()
+
 		box_server_port_map = {boxportdistrib.get_port_box_server_client(self.instance_idx): boxportdistrib.get_port_box_server()}
 
 		print("trying to find a server where requested board_type is available")
@@ -33,6 +36,9 @@ class EmbexpRemote:
 			if (self.node_name != None) and (self.node_name != node_name):
 				continue
 
+			user_id_remotepart = f"{ssh_host}__{ssh_port}"
+			user_id = f"{self.user_id_localpart}__{user_id_remotepart}"
+
 			print(f"trying {ssh_host} and {ssh_port}")
 			try:
 				master_tmp = sshmaster.SshMaster(self.instance_idx, ssh_host, ssh_port, \
@@ -40,7 +46,7 @@ class EmbexpRemote:
 				try:
 					master_tmp.start()
 					box_server_port_client = boxportdistrib.get_port_box_server_client(self.instance_idx)
-					boxc_tmp = boxclient.BoxClient("localhost", box_server_port_client, self.board_type)
+					boxc_tmp = boxclient.BoxClient("localhost", box_server_port_client, self.board_type, user_id=user_id)
 					server_query = boxc_tmp.query_server()
 
 					if do_query:
@@ -90,9 +96,12 @@ class EmbexpRemote:
 		try:
 			box_server_port_client = boxportdistrib.get_port_box_server_client(self.instance_idx)
 
+			user_id_remotepart = f"{self.ssh_host}__{self.ssh_port}"
+			user_id = f"{self.user_id_localpart}__{user_id_remotepart}"
+
 			print("requesting board from server now")
 			self.boxc = boxclient.BoxClient("localhost", box_server_port_client \
-					, self.board_type, box_name=self.box_name, board_name=self.board_name)
+					, self.board_type, box_name=self.box_name, board_name=self.board_name, user_id=user_id)
 
 			self.boxc.start()
 			print(f"Board ID = {' '.join(self.boxc.board_id)}")

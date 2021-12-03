@@ -12,26 +12,28 @@ class BoxServerNoBoardException(Exception):
 
 
 class BoxClient:
-	def __init__(self, hostname, port, board_type, box_name = None, board_name = None):
+	def __init__(self, hostname, port, board_type, box_name = None, board_name = None, user_id = None):
+		if user_id == None:
+			raise Exception("user_id must be something")
 		self.hostname = hostname
 		self.port = port
 		self.board_type = board_type
 		self.box_name = box_name
 		self.board_name = board_name
+		self.user_id = user_id
 
 		self.board_id = None
 		self.board_commands = None
 
 		self.sc = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-	def _request_to_server(sc, request_type):
+	def _request_to_server(sc, request_type, user_id):
 		# is this request type available?
 		request_types = messaging.recv_message(sc)
 		if not request_type in request_types:
 			raise BoxServerNoBoardException(f"{request_type} is no available request type; available types are {request_types}")
 
 		# send request
-		user_id = getpass.getuser()
 		request = [request_type, user_id]
 		messaging.send_message(sc, request)
 
@@ -42,7 +44,7 @@ class BoxClient:
 		with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as sc:
 			sc.connect((self.hostname, self.port))
 
-			result = BoxClient._request_to_server(sc, "query_boxes")
+			result = BoxClient._request_to_server(sc, "query_boxes", self.user_id)
 			return result
 
 
@@ -58,7 +60,7 @@ class BoxClient:
 
 		try:
 			# select to request a board and select board type
-			board_types = BoxClient._request_to_server(self.sc, "get_board")
+			board_types = BoxClient._request_to_server(self.sc, "get_board", self.user_id)
 			# fix case insensitive board type
 			board_types_match = list(filter(lambda x: x.lower() == self.board_type.lower(), board_types))
 			if len(board_types_match) == 1:
