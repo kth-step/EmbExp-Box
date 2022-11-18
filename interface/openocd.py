@@ -30,7 +30,8 @@ target_cfg_dict = {"rpi2"     : config.get_boxpath("config/openocd/target/rpi2.c
                    "lpc11c24" : "target/lpc11xx.cfg",                                 \
                    "arty_a7_100t" : config.get_boxpath("config/openocd/target/arty-a7-100t_riscv_freedom_e31.cfg"), \
                    "genesys2"     : config.get_boxpath("config/openocd/target/ariane.cfg"), \
-                   "hikey620" : "target/hi6220.cfg"}
+                   "hikey620" : "target/hi6220.cfg", \
+                   "stm32f0" : "board/stm32f0discovery.cfg"}
 # TODO: need parameters to allow different config file (in case of different fpga configuration)
 
 interface_cfg_extra_dict = {"rpi2"     : [], \
@@ -39,7 +40,8 @@ interface_cfg_extra_dict = {"rpi2"     : [], \
                             "lpc11c24" : ["-c", "adapter speed 1000"], \
                             "arty_a7_100t" : ["-c", "adapter speed 500"], \
                             "genesys2" : [], \
-                            "hikey620" : ["-c", "adapter speed 500", "-c", "transport select jtag"]}
+                            "hikey620" : ["-c", "adapter speed 500", "-c", "transport select jtag"], \
+                            "stm32f0" : []}
 
 
 # find jtag serial number
@@ -79,6 +81,8 @@ elif _JTAG_JLINK_SERNUM in board_params:
 	interface_cfg    = "interface/jlink.cfg"
 	command_interface_sel = ["-f", interface_cfg]#, "-c", "debug_level 3"]
 	command_interface_sel += ["-c", "jlink serial %s" % jtag_jlink_serial]
+elif board_params["type"] == "stm32f0":
+       command_interface_sel = []
 else:
 	assert False
 

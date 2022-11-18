@@ -1,0 +1,13 @@
+{
+	"box1": {
+		"active": true,
+		"boards": {
+			"stm32f0_0": {
+				"active": true,
+				"type": "stm32f0"
+			}
+		}
+	}
+}
+
+
