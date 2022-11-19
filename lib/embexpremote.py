@@ -131,7 +131,7 @@ class EmbexpRemote:
 		# TODO: the following timeout is a fix for probably wrong ssh usage, should we use -f ? how to handle if the remote port is not available?
 		time.sleep(2)
 
-		if self.board_type == "lpc11c24":
+		if self.board_type == "lpc11c24" or self.board_type == "stm32f0":
 			print(f"no need to wait for {self.board_type} to boot up")
 
 		elif self.board_type == "hikey620":
