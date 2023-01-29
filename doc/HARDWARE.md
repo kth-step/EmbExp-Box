@@ -18,6 +18,10 @@ See the pictures in [`pictures/rpi`](pictures/rpi).
 ### Wiring a RPi with a Mini module
 USB bus power (VBUS to VCC).
    * CN3-1 to CN3-3
+   * Alternative: Self-powered
+     * DON'T CONNECT CN3-1
+     * CN3-2 to RPi pin 6 (GND)
+     * CN3-3 to RPi pin 4 (5V)
 
 IO and chip power (3.3V to VCCIO).
    * CN2-1 to CN2-11
