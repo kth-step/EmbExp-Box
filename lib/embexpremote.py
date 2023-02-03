@@ -61,8 +61,12 @@ class EmbexpRemote:
 							print(b)
 						print()
 
-					if not any(x["type"] == self.board_type for x in server_query["unclaimed"]):
+					if not any(x["type"] == self.board_type and
+						(self.board_name == None or x["id"][1] == self.board_name) and
+						(self.box_name == None or x["id"][0] == self.box_name)
+						for x in server_query["unclaimed"]):
 						continue
+					#print(server_query["unclaimed"])
 				finally:
 					master_tmp.stop()
 			except:
