@@ -62,7 +62,7 @@ if _JTAG_MINIMOD_SERNUM in board_params:
 	interface_cfg    = "interface/ftdi/minimodule.cfg"
 	command_interface_sel = ["-f", interface_cfg]
 	command_interface_sel += ["-c", "ftdi_serial %s" % jtag_ftdi_serial]
-if _JTAG_MINIMODQ_SERNUM in board_params:
+elif _JTAG_MINIMODQ_SERNUM in board_params:
 	jtag_ftdi_serial = board_params[_JTAG_MINIMODQ_SERNUM]
 	interface_cfg    = config.get_boxpath("config/openocd/interface/minimoduleq.cfg")
 	command_interface_sel = ["-f", interface_cfg]
