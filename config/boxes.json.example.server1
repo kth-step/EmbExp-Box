@@ -50,19 +50,6 @@
 				"serial_device": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_F0AF-if00-port0"
 			}
 		}
-	},
-	"box5": {
-		"active": true,
-		"pin_controller": "/dev/serial/by-path/pci-0000:00:12.2-usb-0:3.3:1.0-port0",
-		"boards": {
-			"rpi4_1": {
-				"active": true,
-				"type": "rpi4",
-				"jtag_minimodule_serialnumber": "FT3WE9SE",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT3WE9SE-if01-port0",
-				"pin_reset": 5
-			}
-		}
 	}
 }
 

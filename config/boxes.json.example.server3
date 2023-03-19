@@ -4,7 +4,63 @@
 		"boards": {
 			"stm32f0_0": {
 				"active": true,
-				"type": "stm32f0"
+				"type": "stm32f0",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_TTL232R-3V3_FTGD2XQB-if00-port0"
+			},
+			"lpc11c24_1": {
+				"active": true,
+				"type": "lpc11c24",
+				"jtag_cmsisdap_serialnumber": "0100E01A",
+				"serial_device": "/dev/serial/by-id/usb-NXP_Semiconductors_LPC11U3x_CMSIS-DAP_v1.0.7_0100E01A-if01"
+			}
+		}
+	},
+
+	"box5": {
+		"active": true,
+		"pin_controller": "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.2:1.0-port0",
+		"boards": {
+			"rpi4_1": {
+				"active": true,
+				"type": "rpi4",
+				"jtag_minimodule_serialnumber": "FT3WE9SE",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT3WE9SE-if01-port0",
+				"pin_reset": 5
+			},
+			"rpi4_2": {
+				"active": true,
+				"type": "rpi4",
+				"jtag_minimoduleq_serialnumber": "FT6CCQWG",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6CCQWG-if01-port0",
+				"pin_reset": 6
+			}
+		}
+	},
+
+	"box3": {
+		"active": true,
+		"pin_controller": "/dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_7ec8-if00-port0",
+		"pin_power": 2,
+		"time_powerup_wait": 2,
+		"time_poweroff_delay": 300,
+		"boards": {
+			"rpi3_3": {
+				"active": true,
+				"type": "rpi3",
+				"jtag_minimodule_serialnumber": "FT1OSIJR",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSIJR-if01-port0",
+				"pin_reset": 10,
+				"ethernet_mac": "b8:27:eb:c4:ba:86",
+				"ethernet_tftpboot": "83c4ba86"
+			},
+			"rpi4_0": {
+				"active": true,
+				"type": "rpi4",
+				"jtag_minimodule_serialnumber": "FT1OSM9B",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSM9B-if01-port0",
+				"pin_reset": 11,
+				"ethernet_mac": "dc:a6:32:15:e1:0d",
+				"ethernet_tftpboot": "02e1b72a"
 			}
 		}
 	}
