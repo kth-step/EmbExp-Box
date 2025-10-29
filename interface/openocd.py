@@ -27,6 +27,7 @@ config = boxconfig.BoxConfig()
 target_cfg_dict = {"rpi2"     : config.get_boxpath("config/openocd/target/rpi2.cfg"), \
                    "rpi3"     : config.get_boxpath("config/openocd/target/rpi3.cfg"), \
                    "rpi4"     : config.get_boxpath("config/openocd/target/rpi4.cfg"), \
+                   "rpi5"     : config.get_boxpath("config/openocd/target/rpi5.cfg"), \
                    "lpc11c24" : "target/lpc11xx.cfg",                                 \
                    "arty_a7_100t" : config.get_boxpath("config/openocd/target/arty-a7-100t_riscv_freedom_e31.cfg"), \
                    "genesys2"     : config.get_boxpath("config/openocd/target/ariane.cfg"), \
@@ -37,6 +38,7 @@ target_cfg_dict = {"rpi2"     : config.get_boxpath("config/openocd/target/rpi2.c
 interface_cfg_extra_dict = {"rpi2"     : [], \
                             "rpi3"     : [], \
                             "rpi4"     : [], \
+                            "rpi5"     : [], \
                             "lpc11c24" : ["-c", "adapter speed 1000"], \
                             "arty_a7_100t" : ["-c", "adapter speed 500"], \
                             "genesys2" : [], \
@@ -76,7 +78,7 @@ elif _JTAG_CMSISDAP_SERNUM in board_params:
 	jtag_cmsis_serial = board_params[_JTAG_CMSISDAP_SERNUM]
 	interface_cfg    = "interface/cmsis-dap.cfg"
 	command_interface_sel = ["-f", interface_cfg]
-	command_interface_sel += ["-c", "cmsis_dap_serial %s" % jtag_cmsis_serial]
+	command_interface_sel += ["-c", "adapter serial %s" % jtag_cmsis_serial]
 elif _JTAG_GENESYS2_SERNUM in board_params:
 	jtag_genesys2_serial = board_params[_JTAG_GENESYS2_SERNUM]
 	interface_cfg    = config.get_boxpath("config/openocd/interface/ariane_jtag.cfg")
