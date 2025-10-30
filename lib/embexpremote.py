@@ -156,7 +156,7 @@ class EmbexpRemote:
 			print(f"programming FPGA with bitstream (freedom-e300) - {self.board_type}")
 			embexptools.execute_embexp_programfpga(self.master, self.boxc.get_board_id(), "arty_a7_100t_riscv_freedom_e300/E300ArtyDevKitFPGAChip")
 
-		elif self.board_type == "rpi2" or self.board_type == "rpi3" or self.board_type == "rpi4":
+		elif self.board_type == "rpi2" or self.board_type == "rpi3" or self.board_type == "rpi4" or self.board_type == "rpi5":
 			print(f"waiting for {self.board_type} to boot up")
 			sc = None
 			try:
@@ -179,7 +179,10 @@ class EmbexpRemote:
 				sc.settimeout(boot_timeout)
 
 				# start board (starts boot process)
-				self.boxc.board_start()
+				if self.board_type == "rpi5":
+					self.boxc.send_command("powerup")
+				else:
+					self.boxc.board_start()
 				print("connected and booting")
 				print()
 				sys.stdout.flush()
