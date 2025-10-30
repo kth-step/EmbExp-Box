@@ -67,36 +67,6 @@
 
 	"box11": {
 		"active": true,
-		"pin_controller": "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.4.1:1.0-port0",
-		"boards": {
-			"rpi4_3": {
-				"active": true,
-				"type": "rpi4",
-				"jtag_minimoduleq_serialnumber": "FT6CCRSI",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6CCRSI-if01-port0",
-				"pin_reset": 7
-			},
-
-			"rpi4_4": {
-				"active": true,
-				"type": "rpi4",
-				"jtag_minimoduleq_serialnumber": "FT6BZCOO",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6BZCOO-if01-port0",
-				"pin_reset": 6
-			},
-
-			"rpi4_5": {
-				"active": true,
-				"type": "rpi4",
-				"jtag_minimoduleq_serialnumber": "FT6CCPPE",
-				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6CCPPE-if01-port0",
-				"pin_reset": 5
-			}
-		}
-	},
-
-	"box12": {
-		"active": true,
 		"pin_controller": "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.3.3:1.0-port0",
 		"boards": {
 			"rpi4_0": {
@@ -121,6 +91,55 @@
 				"jtag_minimodule_serialnumber": "FT1OSM9B",
 				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H_MiniModule_FT1OSM9B-if01-port0",
 				"pin_reset": 5
+			}
+		}
+	},
+
+	"box12": {
+		"active": true,
+		"pin_controller": "/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.4.1:1.0-port0",
+		"boards": {
+			"rpi4_3": {
+				"active": true,
+				"type": "rpi4",
+				"jtag_minimoduleq_serialnumber": "FT6CCRSI",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6CCRSI-if01-port0",
+				"pin_reset": 7
+			},
+
+			"rpi4_4": {
+				"active": true,
+				"type": "rpi4",
+				"jtag_minimoduleq_serialnumber": "FT6BZCOO",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6BZCOO-if01-port0",
+				"pin_reset": 6
+			},
+
+			"rpi4_5": {
+				"active": false,
+				"type": "rpi4",
+				"jtag_minimoduleq_serialnumber": "FT6CCPPE",
+				"serial_device": "/dev/serial/by-id/usb-FTDI_FT2232H-56Q_MiniModule_FT6CCPPE-if01-port0",
+				"pin_reset": 5
+			}
+		}
+	},
+
+	"box_15": {
+		"active": true,
+		"pin_controller": "/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A5069RR4-if00-port0",
+		"boards": {
+			"rpi5_0": {
+				"active": true,
+				"type": "rpi5",
+				"jtag_cmsisdap_serialnumber": "E6647C740376542E",
+				"serial_device": "/dev/serial/by-id/usb-Raspberry_Pi_Debug_Probe__CMSIS-DAP__E6647C740376542E-if01",
+				"client_cmds": {
+					"poweroff":       ["pin 4 true", "sleep 1.0"],
+					"powerup":        ["pin 4 false"],
+					"turnoff":        ["pin 2 true", "sleep 0.5", "pin 2 false", "sleep 5.5", "pin 2 true"],
+					"turnon":         ["pin 2 true", "sleep 0.5", "pin 2 false", "sleep 0.8", "pin 2 true"]
+				}
 			}
 		}
 	}
