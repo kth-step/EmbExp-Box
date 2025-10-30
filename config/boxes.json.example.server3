@@ -1,6 +1,6 @@
 {
 	"box10": {
-		"active": true,
+		"active": false,
 		"boards": {
 			"stm32f0_0": {
 				"active": true,
