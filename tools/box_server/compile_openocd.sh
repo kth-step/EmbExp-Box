@@ -16,7 +16,7 @@ cd tools/openocd
 git clean -fdx .
 
 ./bootstrap
-./configure --enable-jlink --enable-ftdi --enable-stlink --enable-cmsis-dap --enable-openjtag
+./configure --enable-jlink --enable-ftdi --enable-stlink --enable-cmsis-dap --enable-openjtag CFLAGS="-Wno-error=calloc-transposed-args"
 make -j4
 
 echo "============================"
